@@ -40,7 +40,7 @@ body{
 /* Контейнер блока таймера */
 .timer-wrap{
   text-align:center;
-  margin:48px auto 20px;
+  margin:32px auto 16px;
 }
 /* Заголовок таймера с эффектом "крови" */
 .timer-title{
@@ -82,55 +82,54 @@ body{
 }
 
 /* ===== BANNER ===== */
-/* Блок "Потери" над баннером */
+/* Блок потерь: заголовок + флаги + значения */
 .losses{
   max-width:900px;
   width:100%;
-  margin:0 auto 12px;
+  margin:0 auto 16px;
   text-align:center;
   padding:0 12px;
 }
 .losses-title{
-  font-size:clamp(16px,4vw,26px);
+  font-size:clamp(36px,9vw,90px);
   font-weight:900;
-  letter-spacing:.05em;
   color:#ff0000;
+  text-shadow:0 0 22px rgba(255,0,0,.95);
   text-transform:uppercase;
-  text-shadow:0 0 18px rgba(255,0,0,.95);
-  animation:bleed 2.5s infinite;
 }
 .flags{
-  margin-top:8px;
+  margin:10px auto 0;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:16px;
+  gap:24px;
+  max-width:600px;
 }
 .flag{
-  height:clamp(32px,6vw,48px);
-  border-radius:999px;
+  width:180px;
+  height:48px;
+  border-radius:0;
   box-shadow:0 0 10px rgba(0,0,0,.35);
 }
-/* Флаги тянутся навстречу к центру */
 .flag.ukr{
-  width:clamp(72px,15vw,135px);
   background:linear-gradient(#0057b7 0 50%, #ffd700 50% 100%);
 }
 .flag.rus{
-  width:clamp(72px,15vw,135px);
   background:linear-gradient(#ffffff 0 33.33%, #1c57a7 33.33% 66.66%, #d52b1e 66.66% 100%);
 }
 .losses-values{
-  margin-top:6px;
+  margin:8px auto 0;
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
-  gap:16px;
+  gap:24px;
+  max-width:600px;
 }
 .losses-value{
-  width:clamp(72px,15vw,135px);
+  width:180px;
   text-align:center;
   font-size:clamp(22px,5vw,40px);
+  font-weight:900;
   color:#ff2b2b;
   text-shadow:0 0 14px rgba(255,0,0,.9);
   animation:bleed 2.5s infinite;
@@ -201,13 +200,6 @@ hr{
   text-decoration:none;
   font-weight:900;
 }
-/* Размер иконок внутри кнопок */
-.social svg{
-  width:22px;
-  height:22px;
-  display:block;
-  fill:currentColor;
-}
 /* Цвета фирменных площадок */
 .fb{background:#1877f2}
 .tw{background:#000}
@@ -266,15 +258,12 @@ hr{
 
 /* Мобильные правки */
 @media(max-width:480px){
-  .timer-wrap{margin:36px auto 16px}
-  .timer{gap:8px}
-  .t{min-width:74px;padding:8px 10px}
-  .losses{margin:0 auto 10px}
-  .flags{gap:10px}
-  .losses-values{gap:10px}
+  .losses{margin:0 auto 12px}
+  .flags,.losses-values{max-width:320px;gap:12px}
+  .flag{width:100px;height:32px}
+  .losses-value{width:100px}
   .panel{padding:14px}
   .social a{width:38px;height:38px}
-  .social svg{width:18px;height:18px}
 }
 </style>
 </head>
@@ -287,12 +276,12 @@ hr{
 <!-- Таймер длительности войны -->
 <div class="timer-wrap">
   <div class="timer-title">
-    ВОЙНА, КОТОРУЮ РАЗВЯЗАЛ ПИДОРАС ПУТИН, ПРОДОЛЖАЕТСЯ:
+    ВОЙНА, КОТОРУЮ РАЗВЯЗАЛ ЛИЧНО ПУТИН, ПРОДОЛЖАЕТСЯ:
   </div>
   <div class="timer" id="timer"></div>
 </div>
 
-<!-- Блок "Потери" над баннером -->
+<!-- Блок потерь -->
 <div class="losses">
   <div class="losses-title">ПОТЕРИ</div>
   <div class="flags" aria-hidden="true">
@@ -317,27 +306,13 @@ hr{
 
     <!-- Кнопки шеринга в соцсетях -->
     <div class="social">
-      <a class="fb" href="https://www.facebook.com/sharer/sharer.php?u=https://in-driver.ru" target="_blank" rel="noopener" aria-label="Facebook">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 8.5V7.1c0-.7.5-1.1 1.2-1.1h1.8V3h-2.5C11.5 3 10 4.5 10 6.8V8.5H8v3h2V21h3.5v-9.5H16l.6-3h-3.1z"/></svg>
-      </a>
-      <a class="tw" href="https://twitter.com/intent/tweet?url=https://in-driver.ru" target="_blank" rel="noopener" aria-label="X (Twitter)">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h4.6l4.2 6.1L17 3h4l-7.2 8.4L21 21h-4.6l-4.4-6.3L6.5 21H2.5l7.6-8.8L3 3z"/></svg>
-      </a>
-      <a class="vk" href="https://vk.com/share.php?url=https://in-driver.ru" target="_blank" rel="noopener" aria-label="VK">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h3.2c.2 0 .4.1.5.4.5 1.3 1.8 3.8 3 3.9.5 0 .7-.5.7-1.6V6.5h3c.3 0 .5.2.5.5v3.1c0 .6.1.9.4.9.4 0 1.4-.6 2.9-3.6.1-.2.3-.4.6-.4h3.3c.4 0 .6.2.4.7-.3 1-1.7 3.4-3.4 5.4-.3.3-.3.6 0 .9 1.2 1.4 3 3.8 3.2 4.5.1.4-.1.6-.5.6h-3.1c-.3 0-.6-.1-.9-.4-.8-.9-1.8-2.4-2.6-3.2-.4-.4-.6-.3-.6.2v2.8c0 .4-.2.6-.6.6h-1.5c-2.7 0-6.3-1.5-8.8-6.7C2.9 6.8 3 6.5 3.5 6.5z"/></svg>
-      </a>
-      <a class="wa" href="https://wa.me/?text=https://in-driver.ru" target="_blank" rel="noopener" aria-label="WhatsApp">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a8.8 8.8 0 0 0-7.5 13.4L3 21l4.8-1.4A8.8 8.8 0 1 0 12 3zm4.8 12.1c-.2.6-1.3 1.1-1.8 1.2-.5.1-1.1.1-1.8-.1-2.5-.9-4.3-3-5-5.2-.2-.6-.2-1.2.1-1.7.2-.4.6-1 .9-1.1.3-.1.6 0 .8.3l.9 1.4c.1.2.1.4 0 .6l-.4.7c-.1.2-.1.4 0 .6.4.7 1.3 1.7 2.7 2.3.2.1.4.1.6 0l.7-.3c.2-.1.4-.1.6 0l1.5.7c.3.1.4.4.3.6z"/></svg>
-      </a>
-      <a class="sig" href="https://signal.me/#/?text=https://in-driver.ru" target="_blank" rel="noopener" aria-label="Signal">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a7.7 7.7 0 0 0-6.6 11.8l-.9 2.2 2.4-.7A7.7 7.7 0 1 0 12 4zm3.8 8.6c0 .3-.2.6-.5.7l-1.7.8c-.5.2-1.1.2-1.6 0-1.4-.5-2.5-1.4-3.2-2.6-.3-.5-.4-1-.3-1.6l.5-1.8c.1-.3.4-.5.7-.5h.6c.3 0 .5.2.6.4l.5 1.2c.1.2 0 .5-.1.7l-.3.5c.4.6 1 1.1 1.7 1.4l.5-.2c.2-.1.5-.1.7 0l1.2.5c.2.1.4.3.4.6v.5z"/></svg>
-      </a>
-      <a class="rd" href="https://www.reddit.com/submit?url=https://in-driver.ru" target="_blank" rel="noopener" aria-label="Reddit">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 12.2c0-1-.9-1.9-2-1.9-.6 0-1.1.2-1.5.6-1.3-.9-3.2-1.5-5.2-1.6l1-3.1 2.7.6c.1.8.8 1.4 1.6 1.4 1 0 1.8-.8 1.8-1.8S18.3 4 17.3 4c-.6 0-1.2.3-1.5.8l-3.4-.8c-.4-.1-.7.1-.8.5l-1.2 4.1c-2.1.1-4 .7-5.3 1.6-.4-.4-.9-.6-1.5-.6-1.1 0-2 .9-2 1.9 0 .8.5 1.5 1.2 1.8-.1.3-.1.6-.1.9 0 2.6 3 4.8 6.8 4.8s6.8-2.1 6.8-4.8c0-.3 0-.6-.1-.9.7-.3 1.2-1 1.2-1.8zm-11.2 1.8c-.7 0-1.2-.5-1.2-1.2s.5-1.2 1.2-1.2 1.2.5 1.2 1.2-.5 1.2-1.2 1.2zm5.9 3c-1 .9-2.2 1.3-3.7 1.3s-2.7-.4-3.7-1.3c-.2-.2-.2-.5 0-.7.2-.2.5-.2.7 0 .8.7 1.8 1 3 1s2.2-.3 3-1c.2-.2.5-.2.7 0 .2.2.2.5 0 .7zm-.1-3c-.7 0-1.2-.5-1.2-1.2s.5-1.2 1.2-1.2 1.2.5 1.2 1.2-.5 1.2-1.2 1.2z"/></svg>
-      </a>
-      <a class="mail" href="mailto:?subject=STOP%20THE%20WAR&body=https://in-driver.ru" aria-label="Email">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16c.6 0 1 .4 1 1v10c0 .6-.4 1-1 1H4c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1zm0 2.1v8.8h16V8.1l-8 5.3-8-5.3zm8 3.9 8-5H4l8 5z"/></svg>
-      </a>
+      <a class="fb" href="https://www.facebook.com/sharer/sharer.php?u=https://in-driver.ru" target="_blank">f</a>
+      <a class="tw" href="https://twitter.com/intent/tweet?url=https://in-driver.ru" target="_blank">X</a>
+      <a class="vk" href="https://vk.com/share.php?url=https://in-driver.ru" target="_blank">vk</a>
+      <a class="wa" href="https://wa.me/?text=https://in-driver.ru" target="_blank">wa</a>
+      <a class="sig" href="https://signal.me/#/?text=https://in-driver.ru" target="_blank">S</a>
+      <a class="rd" href="https://www.reddit.com/submit?url=https://in-driver.ru" target="_blank">r</a>
+      <a class="mail" href="mailto:nowar@putinpidoras.shop?subject=STOP%20THE%20WAR&body=https://in-driver.ru">@</a>
     </div>
   </div>
 </div>
