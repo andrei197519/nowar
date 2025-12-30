@@ -40,7 +40,7 @@ body{
 /* Контейнер блока таймера */
 .timer-wrap{
   text-align:center;
-  margin:32px auto 16px;
+  margin:48px auto 20px;
 }
 /* Заголовок таймера с эффектом "крови" */
 .timer-title{
@@ -82,6 +82,42 @@ body{
 }
 
 /* ===== BANNER ===== */
+/* Блок "Потери" над баннером */
+.losses{
+  max-width:900px;
+  width:100%;
+  margin:0 auto 12px;
+  text-align:center;
+  padding:0 12px;
+}
+.losses-title{
+  font-size:clamp(18px,5vw,32px);
+  font-weight:900;
+  letter-spacing:.08em;
+  color:#fff;
+  text-transform:uppercase;
+}
+.flags{
+  margin-top:8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.flag{
+  height:12px;
+  border-radius:999px;
+  box-shadow:0 0 10px rgba(0,0,0,.35);
+}
+/* Флаги тянутся навстречу к центру */
+.flag.ukr{
+  width:45%;
+  background:linear-gradient(#0057b7 0 50%, #ffd700 50% 100%);
+}
+.flag.rus{
+  width:45%;
+  background:linear-gradient(#ffffff 0 33.33%, #1c57a7 33.33% 66.66%, #d52b1e 66.66% 100%);
+}
 /* Внешний контейнер баннера */
 .wrap{
   min-height:calc(100vh - 240px);
@@ -212,8 +248,17 @@ hr{
 
 /* Мобильные правки */
 @media(max-width:480px){
+  .timer-wrap{margin:36px auto 16px}
+  .timer{gap:8px}
+  .t{min-width:74px;padding:8px 10px}
+  .losses{margin:0 auto 10px}
+  .losses-title{font-size:clamp(16px,7vw,24px)}
+  .flags{gap:10px}
+  .flag{height:10px}
+  .flag.ukr,.flag.rus{width:43%}
   .panel{padding:14px}
   .social a{width:38px;height:38px}
+  .social svg{width:18px;height:18px}
 }
 </style>
 </head>
@@ -229,6 +274,15 @@ hr{
     ВОЙНА, КОТОРУЮ РАЗВЯЗАЛ ПИДОРАС ПУТИН, ПРОДОЛЖАЕТСЯ:
   </div>
   <div class="timer" id="timer"></div>
+</div>
+
+<!-- Блок "Потери" над баннером -->
+<div class="losses">
+  <div class="losses-title">ПОТЕРИ</div>
+  <div class="flags" aria-hidden="true">
+    <div class="flag ukr"></div>
+    <div class="flag rus"></div>
+  </div>
 </div>
 
 <!-- Основной текстовый блок -->
