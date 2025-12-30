@@ -5,7 +5,7 @@
 <title>STOP THE WAR</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-<!-- Open Graph -->
+<!-- Open Graph: превью для соцсетей и мессенджеров -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="STOP THE WAR">
 <meta property="og:description" content="NO TO WAR. FREEDOM FOR UKRAINE. НЕТ ВОЙНЕ. END THE WAR NOW.">
@@ -20,6 +20,7 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <style>
+/* Базовая раскладка страницы */
 html,body{
   margin:0;
   height:100%;
@@ -29,16 +30,19 @@ html,body{
   overflow:hidden;
 }
 body{
+  /* Фон: затемнение + полноэкранная картинка */
   background:
     linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
     url('https://in-driver.ru/og.jpg') center/cover no-repeat fixed;
 }
 
 /* ===== TIMER ===== */
+/* Контейнер блока таймера */
 .timer-wrap{
   text-align:center;
   margin:32px auto 16px;
 }
+/* Заголовок таймера с эффектом "крови" */
 .timer-title{
   font-size:clamp(16px,4vw,26px);
   font-weight:900;
@@ -48,6 +52,7 @@ body{
   text-shadow:0 0 18px rgba(255,0,0,.95);
   animation:bleed 2.5s infinite;
 }
+/* Сетка карточек дней/часов/минут/секунд */
 .timer{
   display:flex;
   justify-content:center;
@@ -55,12 +60,14 @@ body{
   flex-wrap:wrap;
   margin-top:10px;
 }
+/* Карточка одного значения */
 .t{
   background:rgba(0,0,0,.55);
   padding:10px 14px;
   border-radius:12px;
   min-width:90px;
 }
+/* Число внутри карточки */
 .t b{
   display:block;
   font-size:clamp(22px,5vw,40px);
@@ -68,12 +75,14 @@ body{
   text-shadow:0 0 14px rgba(255,0,0,.9);
   animation:bleed 2.5s infinite;
 }
+/* Подпись единицы измерения */
 .t span{
   font-size:12px;
   opacity:.85;
 }
 
 /* ===== BANNER ===== */
+/* Внешний контейнер баннера */
 .wrap{
   min-height:calc(100vh - 240px);
   display:flex;
@@ -81,6 +90,7 @@ body{
   justify-content:center;
   padding:12px;
 }
+/* Полупрозрачная панель с текстом и кнопками */
 .panel{
   max-width:900px;
   width:100%;
@@ -89,6 +99,7 @@ body{
   padding:18px;
   text-align:center;
 }
+/* Главный заголовок страницы */
 h1{
   margin:0 0 10px;
   font-size:clamp(36px,9vw,90px);
@@ -96,15 +107,18 @@ h1{
   text-shadow:0 0 22px rgba(255,0,0,.95);
 }
 
+/* Цветовые акценты, совпадающие с флагом Украины */
 .blue{color:#0057b7;font-weight:900}
 .yellow{color:#ffd700;font-weight:900}
 .red{color:#ff2b2b}
 
+/* Текстовые строки лозунгов */
 p{
   margin:6px 0;
   font-size:clamp(16px,4.5vw,28px);
 }
 
+/* Разделитель между блоками текста */
 hr{
   border:none;
   border-top:1px solid rgba(255,255,255,.45);
@@ -113,6 +127,7 @@ hr{
 }
 
 /* ===== SOCIAL ===== */
+/* Контейнер с иконками шеринга */
 .social{
   margin-top:14px;
   display:flex;
@@ -120,6 +135,7 @@ hr{
   gap:10px;
   flex-wrap:wrap;
 }
+/* Общие стили кнопок */
 .social a{
   width:44px;
   height:44px;
@@ -131,6 +147,7 @@ hr{
   text-decoration:none;
   font-weight:900;
 }
+/* Цвета фирменных площадок */
 .fb{background:#1877f2}
 .tw{background:#000}
 .vk{background:#4c75a3}
@@ -139,11 +156,13 @@ hr{
 .rd{background:#ff4500}
 
 /* ===== BLOOD SNOW ===== */
+/* Слой с "кровавым снегом" поверх всей страницы */
 .snow{
   position:fixed;
   inset:0;
   pointer-events:none;
 }
+/* Одна "капля" анимации */
 .drop{
   position:absolute;
   top:-20px;
@@ -154,11 +173,13 @@ hr{
   box-shadow:0 0 8px rgba(255,0,0,.7);
   animation:fall linear;
 }
+/* Падение капель вниз за пределы экрана */
 @keyframes fall{
   to{transform:translateY(120vh)}
 }
 
 /* ===== AUTHOR ===== */
+/* Подпись автора/источника фото внизу */
 .author{
   position:fixed;
   bottom:8px;
@@ -168,17 +189,20 @@ hr{
   animation:marquee 18s linear infinite;
 }
 
+/* Бегущая строка */
 @keyframes marquee{
   from{transform:translateX(100%)}
   to{transform:translateX(-100%)}
 }
 
 /* ===== ANIM ===== */
+/* Легкое "кровотечение" для заголовка и цифр */
 @keyframes bleed{
   0%,100%{filter:blur(0)}
   50%{filter:blur(1.2px)}
 }
 
+/* Мобильные правки */
 @media(max-width:480px){
   .panel{padding:14px}
   .social a{width:38px;height:38px}
@@ -188,8 +212,10 @@ hr{
 
 <body>
 
+<!-- Контейнер для анимированных капель -->
 <div class="snow" id="snow"></div>
 
+<!-- Таймер длительности войны -->
 <div class="timer-wrap">
   <div class="timer-title">
     ВОЙНА, КОТОРУЮ РАЗВЯЗАЛ ПУТИН, ПРОДОЛЖАЕТСЯ:
@@ -197,6 +223,7 @@ hr{
   <div class="timer" id="timer"></div>
 </div>
 
+<!-- Основной текстовый блок -->
 <div class="wrap">
   <div class="panel">
     <h1>STOP THE WAR</h1>
@@ -206,6 +233,7 @@ hr{
     <p class="blue">PUTIN IS A WAR CRIMINAL</p>
     <p class="red">END THE WAR NOW</p>
 
+    <!-- Кнопки шеринга в соцсетях -->
     <div class="social">
       <a class="fb" href="https://www.facebook.com/sharer/sharer.php?u=https://in-driver.ru" target="_blank">f</a>
       <a class="tw" href="https://twitter.com/intent/tweet?url=https://in-driver.ru" target="_blank">X</a>
@@ -217,6 +245,7 @@ hr{
   </div>
 </div>
 
+<!-- Подпись источника фотографии -->
 <div class="author">
   <span class="yellow">Borodianka, Kyiv Oblast, 6 April.</span>
   <span class="blue"> Photo: Oleksandr Ratushniak / UNDP Ukraine</span>
@@ -224,9 +253,11 @@ hr{
 
 <script>
 /* ===== TIMER (UTC-корректный) ===== */
+// Время начала войны в UTC. Используем Date.parse, чтобы избежать локальных смещений.
 const start = Date.parse('2022-02-24T03:00:00Z'); // начало войны (UTC)
 const timer = document.getElementById('timer');
 
+// Пересчитывает разницу времени и обновляет DOM.
 function tick(){
   const diff = Math.floor((Date.now() - start) / 1000);
 
@@ -235,6 +266,7 @@ function tick(){
   const minutes = Math.floor((diff % 3600) / 60);
   const seconds = diff % 60;
 
+  // Шаблон для четырех карточек таймера.
   timer.innerHTML = `
     <div class="t"><b>${days}</b><span>ДНЕЙ</span></div>
     <div class="t"><b>${hours}</b><span>ЧАСОВ</span></div>
@@ -242,12 +274,15 @@ function tick(){
     <div class="t"><b>${seconds}</b><span>СЕК</span></div>
   `;
 }
+// Первый рендер и последующие обновления раз в секунду.
 tick();
 setInterval(tick,1000);
 
 /* ===== BLOOD SNOW ===== */
+// Создаем "капли" и удаляем их после пролета.
 const snow = document.getElementById('snow');
 setInterval(()=>{
+  // 4 капли за цикл: делает снег плотнее, но без перегруза.
   for(let i=0;i<4;i++){
     const d=document.createElement('div');
     d.className='drop';
