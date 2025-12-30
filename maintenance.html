@@ -147,6 +147,29 @@ body{
   animation:bleed 2.5s infinite;
   line-height:1.1;
 }
+/* Плеер фоновой музыки */
+.player{
+  width:clamp(220px,30vw,320px);
+  height:32px;
+  opacity:.85;
+  filter:drop-shadow(0 0 12px rgba(255,0,0,.35));
+}
+.player::-webkit-media-controls-panel{
+  background:rgba(0,0,0,.55);
+  border-radius:999px;
+}
+.player::-webkit-media-controls-play-button,
+.player::-webkit-media-controls-mute-button{
+  filter:invert(1);
+}
+.player::-webkit-media-controls-current-time-display,
+.player::-webkit-media-controls-time-remaining-display{
+  color:#ff2b2b;
+  text-shadow:0 0 8px rgba(255,0,0,.6);
+}
+.player::-webkit-media-controls-timeline{
+  filter:hue-rotate(-20deg) saturate(1.4);
+}
 /* Внешний контейнер баннера */
 .wrap{
   width:100%;
@@ -274,6 +297,7 @@ hr{
   .flags,.losses-values{max-width:320px;gap:12px}
   .flag{width:100px;height:32px}
   .losses-value{width:100px}
+  .player{width:220px;height:30px}
   .social a{width:38px;height:38px}
 }
 </style>
@@ -286,7 +310,7 @@ hr{
 
 <div class="layout">
   <!-- Фоновая музыка (управление на экране) -->
-  <audio src="Война.mp3" autoplay loop controls></audio>
+  <audio class="player" src="Война.mp3" autoplay loop controls></audio>
 <!-- Таймер длительности войны -->
 <div class="timer-wrap">
   <div class="timer-title">
