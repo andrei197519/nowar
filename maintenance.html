@@ -27,7 +27,7 @@ html,body{
   background:#000;
   color:#fff;
   font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;
-  overflow:hidden;
+  overflow-x:hidden;
 }
 body{
   /* Фон: затемнение + полноэкранная картинка */
@@ -36,11 +36,23 @@ body{
     url('https://in-driver.ru/og.jpg') center/cover no-repeat fixed;
 }
 
+/* Центральная колонка контента */
+.layout{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(10px,2.5vh,20px);
+  padding:clamp(24px,5vh,48px) 12px 56px;
+  box-sizing:border-box;
+}
+
 /* ===== TIMER ===== */
 /* Контейнер блока таймера */
 .timer-wrap{
   text-align:center;
-  margin:32px auto 16px;
+  margin:0;
 }
 /* Заголовок таймера с эффектом "крови" */
 .timer-title{
@@ -86,7 +98,7 @@ body{
 .losses{
   max-width:900px;
   width:100%;
-  margin:0 auto 16px;
+  margin:0 auto;
   text-align:center;
   padding:0 12px;
 }
@@ -137,11 +149,11 @@ body{
 }
 /* Внешний контейнер баннера */
 .wrap{
-  min-height:calc(100vh - 240px);
+  width:100%;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:12px;
+  padding:0;
 }
 /* Полупрозрачная панель с текстом и кнопками */
 .panel{
@@ -149,7 +161,7 @@ body{
   width:100%;
   background:rgba(0,0,0,.42);
   border-radius:16px;
-  padding:18px;
+  padding:clamp(14px,2.5vw,20px);
   text-align:center;
 }
 /* Главный заголовок страницы */
@@ -258,11 +270,10 @@ hr{
 
 /* Мобильные правки */
 @media(max-width:480px){
-  .losses{margin:0 auto 12px}
+  .layout{padding:24px 12px 48px}
   .flags,.losses-values{max-width:320px;gap:12px}
   .flag{width:100px;height:32px}
   .losses-value{width:100px}
-  .panel{padding:14px}
   .social a{width:38px;height:38px}
 }
 </style>
@@ -273,6 +284,9 @@ hr{
 <!-- Контейнер для анимированных капель -->
 <div class="snow" id="snow"></div>
 
+<div class="layout">
+  <!-- Фоновая музыка (может требовать взаимодействия пользователя в браузере) -->
+  <audio src="Война.mp3" autoplay loop></audio>
 <!-- Таймер длительности войны -->
 <div class="timer-wrap">
   <div class="timer-title">
@@ -315,6 +329,7 @@ hr{
       <a class="mail" href="mailto:nowar@putinpidoras.shop?subject=STOP%20THE%20WAR&body=https://in-driver.ru">@</a>
     </div>
   </div>
+</div>
 </div>
 
 <!-- Подпись источника фотографии -->
