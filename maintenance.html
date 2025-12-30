@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>STOP THE WAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="STOP THE WAR">
+<meta property="og:description" content="NO TO WAR. FREEDOM FOR UKRAINE. НЕТ ВОЙНЕ. END THE WAR NOW.">
+<meta property="og:url" content="https://in-driver.ru/">
+<meta property="og:image" content="https://in-driver.ru/og.jpg">
+<meta property="og:image:secure_url" content="https://in-driver.ru/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="800">
+<meta property="og:image:alt" content="STOP THE WAR. НЕТ ВОЙНЕ.">
+
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+html,body{
+  margin:0;
+  height:100%;
+  background:#000;
+  color:#fff;
+  font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+  overflow:hidden;
+}
+body{
+  background:
+    linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+    url('https://in-driver.ru/og.jpg') center/cover no-repeat fixed;
+}
+
+/* ===== TIMER ===== */
+.timer-wrap{
+  text-align:center;
+  margin:32px auto 16px;
+}
+.timer-title{
+  font-size:clamp(16px,4vw,26px);
+  font-weight:900;
+  letter-spacing:.05em;
+  color:#ff0000;
+  text-transform:uppercase;
+  text-shadow:0 0 18px rgba(255,0,0,.95);
+  animation:bleed 2.5s infinite;
+}
+.timer{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.t{
+  background:rgba(0,0,0,.55);
+  padding:10px 14px;
+  border-radius:12px;
+  min-width:90px;
+}
+.t b{
+  display:block;
+  font-size:clamp(22px,5vw,40px);
+  color:#ff2b2b;
+  text-shadow:0 0 14px rgba(255,0,0,.9);
+  animation:bleed 2.5s infinite;
+}
+.t span{
+  font-size:12px;
+  opacity:.85;
+}
+
+/* ===== BANNER ===== */
+.wrap{
+  min-height:calc(100vh - 240px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+}
+.panel{
+  max-width:900px;
+  width:100%;
+  background:rgba(0,0,0,.42);
+  border-radius:16px;
+  padding:18px;
+  text-align:center;
+}
+h1{
+  margin:0 0 10px;
+  font-size:clamp(36px,9vw,90px);
+  color:#ff0000;
+  text-shadow:0 0 22px rgba(255,0,0,.95);
+}
+
+.blue{color:#0057b7;font-weight:900}
+.yellow{color:#ffd700;font-weight:900}
+.red{color:#ff2b2b}
+
+p{
+  margin:6px 0;
+  font-size:clamp(16px,4.5vw,28px);
+}
+
+hr{
+  border:none;
+  border-top:1px solid rgba(255,255,255,.45);
+  margin:14px auto;
+  width:70%;
+}
+
+/* ===== SOCIAL ===== */
+.social{
+  margin-top:14px;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.social a{
+  width:44px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  color:#fff;
+  text-decoration:none;
+  font-weight:900;
+}
+.fb{background:#1877f2}
+.tw{background:#000}
+.vk{background:#4c75a3}
+.wa{background:#25d366}
+.sig{background:#3a76f0}
+.rd{background:#ff4500}
+
+/* ===== BLOOD SNOW ===== */
+.snow{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+.drop{
+  position:absolute;
+  top:-20px;
+  width:6px;
+  height:6px;
+  background:#b00000;
+  border-radius:50%;
+  box-shadow:0 0 8px rgba(255,0,0,.7);
+  animation:fall linear;
+}
+@keyframes fall{
+  to{transform:translateY(120vh)}
+}
+
+/* ===== AUTHOR ===== */
+.author{
+  position:fixed;
+  bottom:8px;
+  right:12px;
+  font-size:12px;
+  white-space:nowrap;
+  animation:marquee 18s linear infinite;
+}
+
+@keyframes marquee{
+  from{transform:translateX(100%)}
+  to{transform:translateX(-100%)}
+}
+
+/* ===== ANIM ===== */
+@keyframes bleed{
+  0%,100%{filter:blur(0)}
+  50%{filter:blur(1.2px)}
+}
+
+@media(max-width:480px){
+  .panel{padding:14px}
+  .social a{width:38px;height:38px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="snow" id="snow"></div>
+
+<div class="timer-wrap">
+  <div class="timer-title">
+    ВОЙНА, КОТОРУЮ РАЗВЯЗАЛ ПУТИН, ПРОДОЛЖАЕТСЯ:
+  </div>
+  <div class="timer" id="timer"></div>
+</div>
+
+<div class="wrap">
+  <div class="panel">
+    <h1>STOP THE WAR</h1>
+    <p class="blue">НЕТ ВОЙНЕ!</p>
+    <p class="yellow">FREEDOM FOR UKRAINE</p>
+    <hr>
+    <p class="blue">PUTIN IS A WAR CRIMINAL</p>
+    <p class="red">END THE WAR NOW</p>
+
+    <div class="social">
+      <a class="fb" href="https://www.facebook.com/sharer/sharer.php?u=https://in-driver.ru" target="_blank">f</a>
+      <a class="tw" href="https://twitter.com/intent/tweet?url=https://in-driver.ru" target="_blank">X</a>
+      <a class="vk" href="https://vk.com/share.php?url=https://in-driver.ru" target="_blank">vk</a>
+      <a class="wa" href="https://wa.me/?text=https://in-driver.ru" target="_blank">wa</a>
+      <a class="sig" href="https://signal.me/#/?text=https://in-driver.ru" target="_blank">S</a>
+      <a class="rd" href="https://www.reddit.com/submit?url=https://in-driver.ru" target="_blank">r</a>
+    </div>
+  </div>
+</div>
+
+<div class="author">
+  <span class="yellow">Borodianka, Kyiv Oblast, 6 April.</span>
+  <span class="blue"> Photo: Oleksandr Ratushniak / UNDP Ukraine</span>
+</div>
+
+<script>
+/* ===== TIMER (UTC-корректный) ===== */
+const start = Date.parse('2022-02-24T03:00:00Z'); // начало войны (UTC)
+const timer = document.getElementById('timer');
+
+function tick(){
+  const diff = Math.floor((Date.now() - start) / 1000);
+
+  const days = Math.floor(diff / 86400);
+  const hours = Math.floor((diff % 86400) / 3600);
+  const minutes = Math.floor((diff % 3600) / 60);
+  const seconds = diff % 60;
+
+  timer.innerHTML = `
+    <div class="t"><b>${days}</b><span>ДНЕЙ</span></div>
+    <div class="t"><b>${hours}</b><span>ЧАСОВ</span></div>
+    <div class="t"><b>${minutes}</b><span>МИН</span></div>
+    <div class="t"><b>${seconds}</b><span>СЕК</span></div>
+  `;
+}
+tick();
+setInterval(tick,1000);
+
+/* ===== BLOOD SNOW ===== */
+const snow = document.getElementById('snow');
+setInterval(()=>{
+  for(let i=0;i<4;i++){
+    const d=document.createElement('div');
+    d.className='drop';
+    d.style.left=Math.random()*100+'vw';
+    d.style.animationDuration=(Math.random()*5+6)+'s';
+    snow.appendChild(d);
+    setTimeout(()=>d.remove(),12000);
+  }
+},300);
+</script>
+
+</body>
+</html>

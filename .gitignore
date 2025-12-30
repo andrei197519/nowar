@@ -1,0 +1,13 @@
+# WordPress core temp
+wp-content/cache/
+wp-content/uploads/
+wp-content/upgrade/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Secrets (оставляем файл, но не будущие изменения)
+wp-config.php
