@@ -91,11 +91,13 @@ body{
   padding:0 12px;
 }
 .losses-title{
-  font-size:clamp(18px,5vw,32px);
+  font-size:clamp(16px,4vw,26px);
   font-weight:900;
-  letter-spacing:.08em;
-  color:#fff;
+  letter-spacing:.05em;
+  color:#ff0000;
   text-transform:uppercase;
+  text-shadow:0 0 18px rgba(255,0,0,.95);
+  animation:bleed 2.5s infinite;
 }
 .flags{
   margin-top:8px;
@@ -105,18 +107,34 @@ body{
   gap:16px;
 }
 .flag{
-  height:12px;
+  height:clamp(32px,6vw,48px);
   border-radius:999px;
   box-shadow:0 0 10px rgba(0,0,0,.35);
 }
 /* Флаги тянутся навстречу к центру */
 .flag.ukr{
-  width:45%;
+  width:clamp(72px,15vw,135px);
   background:linear-gradient(#0057b7 0 50%, #ffd700 50% 100%);
 }
 .flag.rus{
-  width:45%;
+  width:clamp(72px,15vw,135px);
   background:linear-gradient(#ffffff 0 33.33%, #1c57a7 33.33% 66.66%, #d52b1e 66.66% 100%);
+}
+.losses-values{
+  margin-top:6px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+}
+.losses-value{
+  width:clamp(72px,15vw,135px);
+  text-align:center;
+  font-size:clamp(22px,5vw,40px);
+  color:#ff2b2b;
+  text-shadow:0 0 14px rgba(255,0,0,.9);
+  animation:bleed 2.5s infinite;
+  line-height:1.1;
 }
 /* Внешний контейнер баннера */
 .wrap{
@@ -252,10 +270,8 @@ hr{
   .timer{gap:8px}
   .t{min-width:74px;padding:8px 10px}
   .losses{margin:0 auto 10px}
-  .losses-title{font-size:clamp(16px,7vw,24px)}
   .flags{gap:10px}
-  .flag{height:10px}
-  .flag.ukr,.flag.rus{width:43%}
+  .losses-values{gap:10px}
   .panel{padding:14px}
   .social a{width:38px;height:38px}
   .social svg{width:18px;height:18px}
@@ -282,6 +298,10 @@ hr{
   <div class="flags" aria-hidden="true">
     <div class="flag ukr"></div>
     <div class="flag rus"></div>
+  </div>
+  <div class="losses-values">
+    <div class="losses-value">400&nbsp;т.<br>человек</div>
+    <div class="losses-value">1&nbsp;млн.<br>человек</div>
   </div>
 </div>
 
