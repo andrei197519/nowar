@@ -31,9 +31,10 @@ html,body{
 }
 body{
   /* Фон: затемнение + полноэкранная картинка */
+  --bg-image:url('https://in-driver.ru/og.jpg');
   background:
     linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-    url('https://in-driver.ru/og.jpg') center/cover no-repeat fixed;
+    var(--bg-image) center/cover no-repeat fixed;
 }
 
 /* Центральная колонка контента */
@@ -187,6 +188,15 @@ body{
   padding:clamp(14px,2.5vw,20px);
   text-align:center;
 }
+/* Вид баннера после смены фона */
+body.after-swap .panel{
+  max-width:720px;
+  padding:clamp(12px,2vw,16px);
+  border-radius:14px;
+}
+body.after-swap h1{
+  font-size:clamp(28px,7vw,70px);
+}
 /* Главный заголовок страницы */
 h1{
   margin:0 0 10px;
@@ -199,6 +209,19 @@ h1{
 .blue{color:#0057b7;font-weight:900}
 .yellow{color:#ffd700;font-weight:900}
 .red{color:#ff2b2b}
+/* Красная надпись после смены фона */
+.swap-message{
+  margin-top:8px;
+  font-size:clamp(18px,5vw,34px);
+  font-weight:900;
+  color:#ff2b2b;
+  text-shadow:0 0 18px rgba(255,0,0,.9);
+  animation:bleed 2.5s infinite;
+  display:none;
+}
+body.after-swap .swap-message{
+  display:block;
+}
 
 /* Текстовые строки лозунгов */
 p{
@@ -310,7 +333,7 @@ hr{
 
 <div class="layout">
   <!-- Фоновая музыка (управление на экране) -->
-  <audio class="player" src="Война.mp3" autoplay loop controls></audio>
+  <audio class="player" src="Music/Война.mp3" autoplay loop controls></audio>
 <!-- Таймер длительности войны -->
 <div class="timer-wrap">
   <div class="timer-title">
@@ -341,26 +364,24 @@ hr{
     <hr>
     <p class="blue">PUTIN IS A WAR CRIMINAL</p>
     <p class="red">END THE WAR NOW</p>
+    <p class="swap-message">Миру быть. Остановите войну.</p>
 
     <!-- Кнопки шеринга в соцсетях -->
     <div class="social">
-      <a class="fb" href="https://www.facebook.com/sharer/sharer.php?u=https://in-driver.ru" target="_blank">f</a>
-      <a class="tw" href="https://twitter.com/intent/tweet?url=https://in-driver.ru" target="_blank">X</a>
-      <a class="vk" href="https://vk.com/share.php?url=https://in-driver.ru" target="_blank">vk</a>
-      <a class="wa" href="https://wa.me/?text=https://in-driver.ru" target="_blank">wa</a>
-      <a class="sig" href="https://signal.me/#/?text=https://in-driver.ru" target="_blank">S</a>
-      <a class="rd" href="https://www.reddit.com/submit?url=https://in-driver.ru" target="_blank">r</a>
-      <a class="mail" href="mailto:nowar@putinpidoras.shop?subject=STOP%20THE%20WAR&body=https://in-driver.ru">@</a>
+      <a class="fb" data-share="fb" href="#" target="_blank" rel="noopener">f</a>
+      <a class="tw" data-share="tw" href="#" target="_blank" rel="noopener">X</a>
+      <a class="vk" data-share="vk" href="#" target="_blank" rel="noopener">vk</a>
+      <a class="wa" data-share="wa" href="#" target="_blank" rel="noopener">wa</a>
+      <a class="sig" data-share="sig" href="#" target="_blank" rel="noopener">S</a>
+      <a class="rd" data-share="rd" href="#" target="_blank" rel="noopener">r</a>
+      <a class="mail" data-share="mail" href="#">@</a>
     </div>
   </div>
 </div>
 </div>
 
 <!-- Подпись источника фотографии -->
-<div class="author">
-  <span class="yellow">Borodianka, Kyiv Oblast, 6 April.</span>
-  <span class="blue"> Photo: Oleksandr Ratushniak / UNDP Ukraine</span>
-</div>
+<div class="author" id="author"></div>
 
 <script>
 /* ===== TIMER (UTC-корректный) ===== */
@@ -388,6 +409,80 @@ function tick(){
 // Первый рендер и последующие обновления раз в секунду.
 tick();
 setInterval(tick,1000);
+
+/* ===== PHOTO ROTATION ===== */
+const author = document.getElementById('author');
+const photoEndpoint = 'photos.php';
+const swapDelay = 10000;
+let photos = [];
+let currentIndex = 0;
+let rotationTimer = null;
+
+function setAuthorText(text){
+  const clean = (text || '').trim();
+  author.textContent = clean;
+  author.style.display = clean ? 'block' : 'none';
+}
+
+function setShareLinks(file){
+  const shareUrl = `${location.origin}/share.php?photo=${encodeURIComponent(file)}`;
+  const encoded = encodeURIComponent(shareUrl);
+  const mailSubject = encodeURIComponent('STOP THE WAR');
+  const mailTo = `mailto:nowar@putinpidoras.shop?subject=${mailSubject}&body=${encoded}`;
+  const map = {
+    fb: `https://www.facebook.com/sharer/sharer.php?u=${encoded}`,
+    tw: `https://twitter.com/intent/tweet?url=${encoded}`,
+    vk: `https://vk.com/share.php?url=${encoded}`,
+    wa: `https://wa.me/?text=${encoded}`,
+    sig: `https://signal.me/#/?text=${encoded}`,
+    rd: `https://www.reddit.com/submit?url=${encoded}`,
+    mail: mailTo
+  };
+
+  document.querySelectorAll('.social a[data-share]').forEach((link)=>{
+    const key = link.getAttribute('data-share');
+    if (map[key]) {
+      link.href = map[key];
+    }
+  });
+}
+
+function applyPhoto(photo){
+  const encoded = encodeURIComponent(photo.file);
+  const url = `Photo/${encoded}`;
+  document.body.style.setProperty('--bg-image', `url('${url}')`);
+  const fallback = photo.file.replace(/\.[^/.]+$/, '');
+  setAuthorText(photo.comment || fallback);
+  setShareLinks(photo.file);
+}
+
+function startRotation(){
+  if (!photos.length) return;
+  document.body.classList.add('after-swap');
+  currentIndex = (currentIndex + 1) % photos.length;
+  applyPhoto(photos[currentIndex]);
+  if (rotationTimer) clearInterval(rotationTimer);
+  rotationTimer = setInterval(()=>{
+    currentIndex = (currentIndex + 1) % photos.length;
+    applyPhoto(photos[currentIndex]);
+  }, swapDelay);
+}
+
+fetch(photoEndpoint)
+  .then((res)=>res.json())
+  .then((data)=>{
+    photos = Array.isArray(data.photos) ? data.photos : [];
+    if (!photos.length) return;
+
+    const params = new URLSearchParams(location.search);
+    const requested = params.get('photo');
+    const requestedIndex = photos.findIndex((p)=>p.file === requested);
+    currentIndex = requestedIndex >= 0 ? requestedIndex : 0;
+
+    applyPhoto(photos[currentIndex]);
+    setTimeout(startRotation, swapDelay);
+  })
+  .catch(()=>{});
 
 /* ===== BLOOD SNOW ===== */
 // Создаем "капли" и удаляем их после пролета.
