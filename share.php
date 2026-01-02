@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/photo_utils.php';
 
-$photos = nowar_list_photos(__DIR__ . '/Photo');
+$photo_dir = nowar_photo_dir(__DIR__);
+$photos = nowar_list_photos($photo_dir['fs']);
 $photo_map = [];
 foreach ($photos as $photo) {
     $photo_map[$photo['file']] = $photo['comment'];
@@ -21,7 +22,7 @@ $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $base_url = $scheme . '://' . $host;
 
 $image_url = $requested !== ''
-    ? $base_url . '/Photo/' . rawurlencode($requested)
+    ? $base_url . '/' . $photo_dir['web'] . '/' . rawurlencode($requested)
     : $base_url . '/og.jpg';
 $page_url = $base_url . '/share.php?photo=' . rawurlencode($requested);
 $title = 'STOP THE WAR';
@@ -45,7 +46,7 @@ $description = $comment !== '' ? $comment : 'NO TO WAR. FREEDOM FOR UKRAINE. END
 <body style="margin:0;background:#000;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;">
   <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;gap:16px;">
     <?php if ($requested !== ''): ?>
-      <img src="<?php echo htmlspecialchars('/Photo/' . rawurlencode($requested), ENT_QUOTES, 'UTF-8'); ?>" alt="" style="max-width:92vw;max-height:70vh;object-fit:contain;">
+      <img src="<?php echo htmlspecialchars('/' . $photo_dir['web'] . '/' . rawurlencode($requested), ENT_QUOTES, 'UTF-8'); ?>" alt="" style="max-width:92vw;max-height:70vh;object-fit:contain;">
     <?php endif; ?>
     <?php if ($comment !== ''): ?>
       <div style="max-width:900px;font-size:16px;opacity:.85;"><?php echo htmlspecialchars($comment, ENT_QUOTES, 'UTF-8'); ?></div>

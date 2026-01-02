@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "php-server",
+      "type": "shell",
+      "command": "php",
+      "args": [
+        "-S",
+        "localhost:8080",
+        "-t",
+        "${workspaceFolder}"
+      ],
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    }
+  ]
+}

@@ -412,8 +412,9 @@ setInterval(tick,1000);
 
 /* ===== PHOTO ROTATION ===== */
 const author = document.getElementById('author');
-const photoEndpoint = 'photos.php';
+const photoEndpoint = 'photos.json';
 const swapDelay = 10000;
+let photoDir = 'Photo';
 let photos = [];
 let currentIndex = 0;
 let rotationTimer = null;
@@ -425,7 +426,10 @@ function setAuthorText(text){
 }
 
 function setShareLinks(file){
-  const shareUrl = `${location.origin}/share.php?photo=${encodeURIComponent(file)}`;
+  const basePage = location.origin === 'null'
+    ? 'maintenance.html'
+    : `${location.origin}/maintenance.html`;
+  const shareUrl = `${basePage}?photo=${encodeURIComponent(file)}`;
   const encoded = encodeURIComponent(shareUrl);
   const mailSubject = encodeURIComponent('STOP THE WAR');
   const mailTo = `mailto:nowar@putinpidoras.shop?subject=${mailSubject}&body=${encoded}`;
@@ -449,7 +453,7 @@ function setShareLinks(file){
 
 function applyPhoto(photo){
   const encoded = encodeURIComponent(photo.file);
-  const url = `Photo/${encoded}`;
+  const url = `${photoDir}/${encoded}`;
   document.body.style.setProperty('--bg-image', `url('${url}')`);
   const fallback = photo.file.replace(/\.[^/.]+$/, '');
   setAuthorText(photo.comment || fallback);
@@ -471,6 +475,9 @@ function startRotation(){
 fetch(photoEndpoint)
   .then((res)=>res.json())
   .then((data)=>{
+    if (data && typeof data.dir === 'string' && data.dir.trim() !== '') {
+      photoDir = data.dir.trim();
+    }
     photos = Array.isArray(data.photos) ? data.photos : [];
     if (!photos.length) return;
 

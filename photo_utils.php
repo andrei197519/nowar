@@ -23,6 +23,17 @@ function nowar_decode_user_comment($value) {
     return nowar_clean_text($value);
 }
 
+function nowar_decode_xp_text($value) {
+    if (is_array($value)) {
+        $value = pack('C*', ...$value);
+    }
+    if (!is_string($value) || $value === '') {
+        return '';
+    }
+    $decoded = @iconv('UTF-16LE', 'UTF-8', $value);
+    return nowar_clean_text($decoded);
+}
+
 function nowar_extract_comment($path) {
     $comment = '';
 
@@ -30,14 +41,19 @@ function nowar_extract_comment($path) {
         $exif = @exif_read_data($path, null, true, false);
         if (is_array($exif)) {
             if (!empty($exif['IFD0']['XPComment'])) {
-                $decoded = @iconv('UTF-16LE', 'UTF-8', $exif['IFD0']['XPComment']);
-                $comment = nowar_clean_text($decoded);
+                $comment = nowar_decode_xp_text($exif['IFD0']['XPComment']);
             }
             if ($comment === '' && !empty($exif['IFD0']['ImageDescription'])) {
                 $comment = nowar_clean_text($exif['IFD0']['ImageDescription']);
             }
             if ($comment === '' && !empty($exif['EXIF']['UserComment'])) {
                 $comment = nowar_decode_user_comment($exif['EXIF']['UserComment']);
+            }
+            if ($comment === '' && !empty($exif['IFD0']['XPAuthor'])) {
+                $comment = nowar_decode_xp_text($exif['IFD0']['XPAuthor']);
+            }
+            if ($comment === '' && !empty($exif['IFD0']['Artist'])) {
+                $comment = nowar_clean_text($exif['IFD0']['Artist']);
             }
         }
     }
@@ -48,7 +64,7 @@ function nowar_extract_comment($path) {
         if (!empty($info['APP13'])) {
             $iptc = @iptcparse($info['APP13']);
             if (is_array($iptc)) {
-                $fields = ['2#120', '2#005', '2#025'];
+                $fields = ['2#120', '2#005', '2#025', '2#080'];
                 foreach ($fields as $field) {
                     if (!empty($iptc[$field][0])) {
                         $comment = nowar_clean_text($iptc[$field][0]);
@@ -60,6 +76,17 @@ function nowar_extract_comment($path) {
     }
 
     return $comment;
+}
+
+function nowar_photo_dir($base_dir) {
+    $candidates = ['photo', 'Photo'];
+    foreach ($candidates as $candidate) {
+        $path = $base_dir . DIRECTORY_SEPARATOR . $candidate;
+        if (is_dir($path)) {
+            return ['fs' => $path, 'web' => $candidate];
+        }
+    }
+    return ['fs' => $base_dir . DIRECTORY_SEPARATOR . 'Photo', 'web' => 'Photo'];
 }
 
 function nowar_list_photos($dir) {

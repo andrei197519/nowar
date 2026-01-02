@@ -1,0 +1,13 @@
+{
+  "dir": "Photo",
+  "photos": [
+    {
+      "file": "A family seeking.jpg",
+      "comment": "Oleksandr Ratushniak"
+    },
+    {
+      "file": "A shelling partially destroyed .jpg",
+      "comment": "Oleksandr Ratushniak"
+    }
+  ]
+}

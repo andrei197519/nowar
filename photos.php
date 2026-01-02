@@ -4,8 +4,12 @@ require_once __DIR__ . '/photo_utils.php';
 header('Content-Type: application/json; charset=UTF-8');
 header('Cache-Control: no-store');
 
-$photos = nowar_list_photos(__DIR__ . '/Photo');
-$payload = ['photos' => []];
+$photo_dir = nowar_photo_dir(__DIR__);
+$photos = nowar_list_photos($photo_dir['fs']);
+$payload = [
+    'dir' => $photo_dir['web'],
+    'photos' => []
+];
 
 foreach ($photos as $photo) {
     $payload['photos'][] = [
