@@ -1,0 +1,358 @@
+
+html,body{
+  margin:0;
+  height:100%;
+  background:#000;
+  color:#fff;
+  font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+  overflow-x:hidden;
+}
+body{
+  
+  background:
+    linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+    url('og.jpg') center/cover no-repeat fixed;
+}
+
+
+.layout{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(10px,2.5vh,20px);
+  padding:clamp(24px,5vh,48px) 12px 56px;
+  box-sizing:border-box;
+}
+
+
+body.hero-hidden .layout{
+  opacity:0;
+  pointer-events:none;
+}
+
+
+
+.timer-wrap{
+  text-align:center;
+  margin:0;
+}
+
+.timer-title{
+  font-size:clamp(16px,4vw,26px);
+  font-weight:900;
+  letter-spacing:.05em;
+  color:#ff0000;
+  text-transform:uppercase;
+  text-shadow:0 0 18px rgba(255,0,0,.95);
+  animation:bleed 2.5s infinite;
+}
+
+.timer{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.t{
+  background:rgba(0,0,0,.55);
+  padding:10px 14px;
+  border-radius:12px;
+  min-width:90px;
+}
+
+.t b{
+  display:block;
+  font-size:clamp(22px,5vw,40px);
+  color:#ff2b2b;
+  text-shadow:0 0 14px rgba(255,0,0,.9);
+  animation:bleed 2.5s infinite;
+}
+
+.t span{
+  font-size:12px;
+  opacity:.85;
+}
+
+
+
+.losses{
+  max-width:900px;
+  width:100%;
+  margin:0 auto;
+  text-align:center;
+  padding:0 12px;
+}
+.losses-title{
+  font-size:clamp(36px,9vw,90px);
+  font-weight:900;
+  color:#ff0000;
+  text-shadow:0 0 22px rgba(255,0,0,.95);
+  text-transform:uppercase;
+}
+.flags{
+  margin:10px auto 0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  max-width:600px;
+}
+.flag{
+  width:180px;
+  height:48px;
+  border-radius:0;
+  box-shadow:0 0 10px rgba(0,0,0,.35);
+}
+.flag.ukr{
+  background:linear-gradient(#0057b7 0 50%, #ffd700 50% 100%);
+}
+.flag.rus{
+  background:linear-gradient(#ffffff 0 33.33%, #1c57a7 33.33% 66.66%, #d52b1e 66.66% 100%);
+}
+.losses-values{
+  margin:8px auto 0;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:24px;
+  max-width:600px;
+}
+.losses-value{
+  width:180px;
+  text-align:center;
+  font-size:clamp(22px,5vw,40px);
+  font-weight:900;
+  color:#ff2b2b;
+  text-shadow:0 0 14px rgba(255,0,0,.9);
+  animation:bleed 2.5s infinite;
+  line-height:1.1;
+}
+
+.player{
+  position:fixed;
+  top:12px;
+  right:12px;
+  z-index:6;
+  width:clamp(160px,45vw,240px);
+  height:32px;
+  opacity:.85;
+  filter:drop-shadow(0 0 12px rgba(255,0,0,.35));
+}
+.player::-webkit-media-controls-panel{
+  background:rgba(0,0,0,.55);
+  border-radius:999px;
+}
+.player::-webkit-media-controls-play-button,
+.player::-webkit-media-controls-mute-button{
+  filter:invert(1);
+}
+.player::-webkit-media-controls-current-time-display,
+.player::-webkit-media-controls-time-remaining-display{
+  color:#ff2b2b;
+  text-shadow:0 0 8px rgba(255,0,0,.6);
+}
+.player::-webkit-media-controls-timeline{
+  filter:hue-rotate(-20deg) saturate(1.4);
+}
+
+.wrap{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+}
+
+.panel{
+  max-width:900px;
+  width:100%;
+  background:rgba(0,0,0,.42);
+  border-radius:16px;
+  padding:clamp(14px,2.5vw,20px);
+  text-align:center;
+}
+
+h1{
+  margin:0 0 10px;
+  font-size:clamp(36px,9vw,90px);
+  color:#ff0000;
+  text-shadow:0 0 22px rgba(255,0,0,.95);
+}
+
+
+.blue{color:#0057b7;font-weight:900}
+.yellow{color:#ffd700;font-weight:900}
+.red{color:#ff2b2b}
+
+
+p{
+  margin:6px 0;
+  font-size:clamp(16px,4.5vw,28px);
+}
+
+
+hr{
+  border:none;
+  border-top:1px solid rgba(255,255,255,.45);
+  margin:14px auto;
+  width:70%;
+}
+
+
+
+.social{
+  margin-top:14px;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.social a{
+  width:44px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  color:#fff;
+  text-decoration:none;
+  font-weight:900;
+}
+
+.fb{background:#1877f2}
+.tw{background:#000}
+.vk{background:#4c75a3}
+.wa{background:#25d366}
+.sig{background:#3a76f0}
+.tg{background:#229ed9}
+.rd{background:#ff4500}
+.mail{background:#ffb400}
+
+
+
+.snow{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+
+.drop{
+  position:absolute;
+  top:-20px;
+  width:6px;
+  height:6px;
+  background:#b00000;
+  border-radius:50%;
+  box-shadow:0 0 8px rgba(255,0,0,.7);
+  animation:fall linear;
+}
+
+@keyframes fall{
+  to{transform:translateY(120vh)}
+}
+
+
+.news{
+  width:min(1200px, 92vw);
+  margin:40px auto 110px;
+}
+.news-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:16px;
+}
+.news-title{
+  margin:0;
+  font-size:clamp(18px,3vw,28px);
+  color:inherit;
+  font-weight:900;
+}
+.news-source{
+  color:#ffd700;
+  text-decoration:none;
+  font-weight:700;
+}
+.news-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:16px;
+}
+.news-card{
+  background:rgba(0,0,0,.6);
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
+}
+.news-link{
+  display:block;
+  color:inherit;
+  text-decoration:none;
+  height:100%;
+}
+.news-media{
+  display:block;
+  width:100%;
+  height:160px;
+  object-fit:cover;
+  background:#111;
+}
+.news-body{
+  padding:12px 14px 14px;
+}
+.news-time{
+  font-size:12px;
+  opacity:.8;
+  margin-bottom:6px;
+}
+.news-item-title{
+  font-size:15px;
+  font-weight:700;
+  line-height:1.25;
+}
+.news-excerpt{
+  margin-top:8px;
+  font-size:13px;
+  line-height:1.35;
+  opacity:.85;
+}
+
+
+
+.author{
+  position:fixed;
+  bottom:8px;
+  right:12px;
+  font-size:16px;
+  white-space:nowrap;
+  animation:marquee 30s linear 1;
+}
+
+
+@keyframes marquee{
+  from{transform:translateX(100%)}
+  to{transform:translateX(-100%)}
+}
+
+
+
+@keyframes bleed{
+  0%,100%{filter:blur(0)}
+  50%{filter:blur(1.2px)}
+}
+
+
+@media(max-width:480px){
+  .layout{padding:24px 12px 48px}
+  .flags,.losses-values{max-width:320px;gap:12px}
+  .flag{width:100px;height:32px}
+  .losses-value{width:100px}
+  .player{width:160px;height:28px;top:8px;right:8px}
+  .social a{width:38px;height:38px}
+}
