@@ -1,0 +1,150 @@
+{
+  "cities": [
+    {
+      "ru": "Мариуполь",
+      "en": "Mariupol",
+      "uk": "Маріуполь",
+      "major_destruction": true,
+      "reported_war_crimes": true,
+      "missile_attacks": true,
+      "air_strikes": true,
+      "siege": true,
+      "weapon_type_reported": [
+        "guided missiles",
+        "air-delivered munitions",
+        "artillery and rocket artillery"
+      ],
+      "authoritative_sources": [
+        "https://www.ohchr.org/en/press-releases/2022/06/un-human-rights-office-mariupol-destruction",
+        "https://www.amnesty.org/en/latest/news/2022/06/ukraine-mariupol-theatre-war-crime/",
+        "https://www.hrw.org/news/2022/03/03/ukraine-mariupol-attacks-civilians"
+      ]
+    },
+    {
+      "ru": "Харьков",
+      "en": "Kharkiv",
+      "uk": "Харків",
+      "major_destruction": true,
+      "reported_war_crimes": true,
+      "missile_attacks": true,
+      "air_strikes": false,
+      "siege": false,
+      "weapon_type_reported": [
+        "missiles",
+        "unguided rockets"
+      ],
+      "authoritative_sources": [
+        "https://www.hrw.org/news/2022/03/04/ukraine-russian-attacks-kharkiv",
+        "https://www.amnesty.org/en/latest/news/2024/05/ukraine-deadly-russian-attacks-kharkiv/",
+        "https://www.ohchr.org/en/documents/country-reports/ukraine-hrmmu-reports"
+      ]
+    },
+    {
+      "ru": "Львов",
+      "en": "Lviv",
+      "uk": "Львів",
+      "major_destruction": false,
+      "reported_war_crimes": true,
+      "missile_attacks": true,
+      "air_strikes": false,
+      "siege": false,
+      "weapon_type_reported": [
+        "long-range missiles"
+      ],
+      "authoritative_sources": [
+        "https://www.hrw.org/news/2023/09/07/ukraine-russian-missile-attacks-western-ukraine",
+        "https://www.ohchr.org/en/documents/country-reports/ukraine-hrmmu-reports"
+      ]
+    },
+    {
+      "ru": "Чернигов",
+      "en": "Chernihiv",
+      "uk": "Чернігів",
+      "major_destruction": true,
+      "reported_war_crimes": true,
+      "missile_attacks": true,
+      "air_strikes": true,
+      "siege": true,
+      "weapon_type_reported": [
+        "missiles",
+        "air-delivered munitions",
+        "artillery"
+      ],
+      "authoritative_sources": [
+        "https://www.ohchr.org/en/press-releases/2022/04/ukraine-civilians-killed-chernihiv-region"
+      ]
+    },
+    {
+      "ru": "Изюм",
+      "en": "Izyum",
+      "uk": "Ізюм",
+      "major_destruction": true,
+      "reported_war_crimes": true,
+      "missile_attacks": true,
+      "air_strikes": false,
+      "siege": false,
+      "weapon_type_reported": [
+        "missiles",
+        "artillery"
+      ],
+      "authoritative_sources": [
+        "https://www.ohchr.org/en/press-releases/2022/09/ukraine-un-experts-alarmed-mass-graves-izyum",
+        "https://www.hrw.org/news/2022/09/15/ukraine-evidence-war-crimes-izyum"
+      ]
+    },
+    {
+      "ru": "Киев",
+      "en": "Kyiv",
+      "uk": "Київ",
+      "major_destruction": true,
+      "reported_war_crimes": true,
+      "missile_attacks": true,
+      "air_strikes": false,
+      "siege": false,
+      "weapon_type_reported": [
+        "missiles",
+        "loitering munitions"
+      ],
+      "authoritative_sources": [
+        "https://www.ohchr.org/en/countries/ukraine",
+        "https://www.ohchr.org/en/documents/country-reports/ukraine-hrmmu-reports"
+      ]
+    },
+    {
+      "ru": "Буча",
+      "en": "Bucha",
+      "uk": "Буча",
+      "major_destruction": false,
+      "reported_war_crimes": true,
+      "missile_attacks": false,
+      "air_strikes": false,
+      "siege": false,
+      "weapon_type_reported": [],
+      "authoritative_sources": [
+        "https://www.ohchr.org/en/press-releases/2022/04/un-human-rights-office-documents-unlawful-killings-bucha",
+        "https://www.hrw.org/news/2022/04/21/ukraine-bucha-summary-executions"
+      ]
+    },
+    {
+      "ru": "Херсон",
+      "en": "Kherson",
+      "uk": "Херсон",
+      "major_destruction": false,
+      "reported_war_crimes": true,
+      "missile_attacks": false,
+      "air_strikes": false,
+      "siege": false,
+      "weapon_type_reported": [],
+      "authoritative_sources": [
+        "https://www.ohchr.org/en/press-releases/2023/03/ukraine-detainees-tortured-kherson-region",
+        "https://www.hrw.org/news/2023/01/19/ukraine-russia-torture-kherson"
+      ]
+    }
+  ],
+  "schema_notes": {
+    "missile_attacks": "Confirmed missile strikes reported by OHCHR/HRW/Amnesty or aggregated HRMMU reports",
+    "air_strikes": "Explicitly identified air-delivered munitions or aviation strikes in sources",
+    "siege": "Encirclement or sustained isolation described by authoritative sources",
+    "weapon_type_reported": "Exact wording used in reports; no technical extrapolation"
+  }
+}

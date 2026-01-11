@@ -19,6 +19,11 @@
 
 <meta name="twitter:card" content="summary_large_image">
 
+<link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+<link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
+<link rel="manifest" href="favicon/site.webmanifest">
+<link rel="shortcut icon" href="favicon/favicon.ico">
 <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -27,13 +32,70 @@
 
 <div class="snow" id="snow"></div>
 
+<header class="site-header">
+  <div class="header-left">
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-lang="uk">UA</button>
+      <button type="button" data-lang="en">EN</button>
+      <button type="button" data-lang="ru">RU</button>
+    </div>
+    <div class="lang-switch back-switch" role="group" aria-label="Back">
+      <button type="button" class="back-button" data-i18n="back_button">Назад</button>
+    </div>
+    <div class="city-info" aria-label="City info">
+      <div class="city-info-title" data-i18n="city_info_title">Военные преступления</div>
+      <div class="city-info-list">
+        <div class="city-info-item" data-city-field="major_destruction">
+          <img src="icons/major_destruction.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_major_destruction">Разрушения</span>
+        </div>
+        <div class="city-info-item" data-city-field="reported_war_crimes">
+          <img src="icons/reported_war_crimes.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_reported_war_crimes">Военные преступления</span>
+        </div>
+        <div class="city-info-item" data-city-field="missile_attacks">
+          <img src="icons/missile_attacks.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_missile_attacks">Ракетные удары</span>
+        </div>
+        <div class="city-info-item" data-city-field="air_strikes">
+          <img src="icons/air_strikes.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_air_strikes">Авиаудары</span>
+        </div>
+        <div class="city-info-item" data-city-field="siege">
+          <img src="icons/siege.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_siege">Осада</span>
+        </div>
+        <div class="city-info-item" data-city-field="weapon_type_reported">
+          <img src="icons/weapon_type_reported.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_weapon_type_reported">Вооружение</span>
+        </div>
+        <div class="city-info-item" data-city-field="authoritative_sources">
+          <img src="icons/authoritative_sources.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_authoritative_sources">Источники</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="header-center">
+    <div class="city-button" role="group" aria-label="City">
+      <button type="button" data-i18n="city_button">ГОРОД</button>
+    </div>
+    <div class="city-menu" id="city-menu" aria-hidden="true">
+      <div class="city-menu-inner">
+        <ul class="city-list" id="city-list"></ul>
+      </div>
+    </div>
+  </div>
+  <div class="header-right">
+    <audio class="player" src="Assets/Audio/Music.mp3" autoplay loop controls></audio>
+  </div>
+</header>
 
-<audio class="player" src="Assets/Audio/Music.mp3" autoplay loop controls></audio>
-
+<main class="main">
 <div class="layout">
 
 <div class="timer-wrap">
-  <div class="timer-title">
+  <div class="timer-title" data-i18n="timer_title">
     ВОЙНА, КОТОРУЮ РАЗВЯЗАЛ ЛИЧНО ПУТИН, ПРОДОЛЖАЕТСЯ:
   </div>
   <div class="timer" id="timer"></div>
@@ -41,26 +103,26 @@
 
 
 <div class="losses">
-  <div class="losses-title">ПОТЕРИ</div>
+  <div class="losses-title" data-i18n="losses_title">ПОТЕРИ</div>
   <div class="flags" aria-hidden="true">
     <div class="flag ukr"></div>
     <div class="flag rus"></div>
   </div>
   <div class="losses-values">
-    <div class="losses-value">400&nbsp;т.<br>человек</div>
-    <div class="losses-value">1&nbsp;млн.<br>человек</div>
+    <div class="losses-value" data-i18n-html="losses_value_1">400&nbsp;т.<br>человек</div>
+    <div class="losses-value" data-i18n-html="losses_value_2">1&nbsp;млн.<br>человек</div>
   </div>
 </div>
 
 
 <div class="wrap">
   <div class="panel">
-    <h1>STOP THE WAR</h1>
-    <p class="blue">НЕТ ВОЙНЕ!</p>
-    <p class="yellow">FREEDOM FOR UKRAINE</p>
+    <h1 data-i18n="hero_title">STOP THE WAR</h1>
+    <p class="blue" data-i18n="hero_line_1">НЕТ ВОЙНЕ!</p>
+    <p class="yellow" data-i18n="hero_line_2">FREEDOM FOR UKRAINE</p>
     <hr>
-    <p class="blue">PUTIN IS A WAR CRIMINAL</p>
-    <p class="red">END THE WAR NOW</p>
+    <p class="blue" data-i18n="hero_line_3">PUTIN IS A WAR CRIMINAL</p>
+    <p class="red" data-i18n="hero_line_4">END THE WAR NOW</p>
 
     
     <div class="social">
@@ -72,17 +134,30 @@
       <a class="tg" href="https://t.me/share/url?url=https://in-driver.ru" target="_blank">tg</a>
       <a class="rd" href="https://www.reddit.com/submit?url=https://in-driver.ru" target="_blank">r</a>
       <a class="mail" href="mailto:nowar@putinpidoras.shop?subject=STOP%20THE%20WAR&body=https://in-driver.ru">@</a>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<div class="modal" id="sources-modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modal__backdrop" data-modal-close></div>
+  <div class="modal__panel" role="document">
+    <div class="modal__header">
+      <div class="modal__title" data-i18n="sources_modal_title">Источники</div>
+      <button type="button" class="modal__close" data-modal-close aria-label="Close">✕</button>
     </div>
+    <div class="modal__body" id="sources-modal-body"></div>
   </div>
 </div>
-</div>
 
 
-
+<footer class="site-footer">
 <div class="author">
   <span class="yellow">Borodianka, Kyiv Oblast, 6 April.</span>
   <span class="blue"> Photo: Oleksandr Ratushniak / UNDP Ukraine</span>
 </div>
+</footer>
 
 <script src="config.js"></script>
 <script src="scripts.js"></script>
