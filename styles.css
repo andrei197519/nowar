@@ -205,6 +205,11 @@ body.city-mode .wrap{
   display:none;
 }
 
+body.city-mode.hero-hidden .layout{
+  opacity:1;
+  pointer-events:auto;
+}
+
 .city-info{
   width:var(--control-width);
   padding:8px 10px;

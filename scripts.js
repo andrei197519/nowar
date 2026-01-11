@@ -129,6 +129,10 @@ function setActiveCity(city){
     return;
   }
   activeCity = city;
+  if(heroTimeout){
+    clearTimeout(heroTimeout);
+  }
+  document.body.classList.remove('hero-hidden');
   const cityKey = getCityKey(city);
   document.body.dataset.city = cityKey;
   document.body.dataset.cityRu = city.ru || city.name_ru || '';
