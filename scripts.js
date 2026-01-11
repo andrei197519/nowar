@@ -3,6 +3,7 @@ const start = Date.parse('2022-02-24T03:00:00Z');
 const timer = document.getElementById('timer');
 const isSimplePage = document.body?.dataset?.simplePage === 'true';
 const simplePageCityKey = document.body?.dataset?.city || '';
+const defaultTitle = document.title;
 
 const PHOTO_DURATION_MS = 30000;
 const HERO_VISIBLE_MS = 5000;
@@ -20,6 +21,16 @@ const translations = {
     hero_line_3: 'ПУТИН - ВОЕННЫЙ ПРЕСТУПНИК',
     hero_line_4: 'ПРЕКРАТИТЕ ВОЙНУ СЕЙЧАС',
     city_button: 'ПРЕСТУПЛЕНИЯ ПУТИНА В УКРАИНЕ',
+    back_button: 'Назад',
+    city_info_title: 'Военные преступления',
+    info_major_destruction: 'Разрушения',
+    info_reported_war_crimes: 'Военные преступления',
+    info_missile_attacks: 'Ракетные удары',
+    info_air_strikes: 'Авиаудары',
+    info_siege: 'Осада',
+    info_weapon_type_reported: 'Вооружение',
+    info_authoritative_sources: 'Источники',
+    sources_modal_title: 'Источники',
   },
   uk: {
     timer_title: "ВІЙНА, ЯКУ РОЗВ'ЯЗАВ ОСОБИСТО ПУТІН, ТРИВАЄ:",
@@ -32,6 +43,16 @@ const translations = {
     hero_line_3: 'ПУТІН - ВОЄННИЙ ЗЛОЧИНЕЦЬ',
     hero_line_4: 'ЗУПИНІТЬ ВІЙНУ ЗАРАЗ',
     city_button: 'ЗЛОЧИНИ ПУТІНА В УКРАЇНІ',
+    back_button: 'Назад',
+    city_info_title: 'Воєнні злочини',
+    info_major_destruction: 'Руйнування',
+    info_reported_war_crimes: 'Воєнні злочини',
+    info_missile_attacks: 'Ракетні удари',
+    info_air_strikes: 'Авіаудари',
+    info_siege: 'Облога',
+    info_weapon_type_reported: 'Озброєння',
+    info_authoritative_sources: 'Джерела',
+    sources_modal_title: 'Джерела',
   },
   en: {
     timer_title: 'THE WAR STARTED PERSONALLY BY PUTIN CONTINUES:',
@@ -44,6 +65,16 @@ const translations = {
     hero_line_3: 'PUTIN IS A WAR CRIMINAL',
     hero_line_4: 'END THE WAR NOW',
     city_button: 'PUTIN CRIMES IN UKRAINE',
+    back_button: 'Back',
+    city_info_title: 'War crimes',
+    info_major_destruction: 'Destruction',
+    info_reported_war_crimes: 'War crimes',
+    info_missile_attacks: 'Missile strikes',
+    info_air_strikes: 'Air strikes',
+    info_siege: 'Siege',
+    info_weapon_type_reported: 'Weaponry',
+    info_authoritative_sources: 'Sources',
+    sources_modal_title: 'Sources',
   },
 };
 
@@ -64,6 +95,8 @@ let currentLang = 'ru';
 let currentPhoto = null;
 let heroTimeout = null;
 let cities = [];
+let activeCity = null;
+let lvivInterval = null;
 
 const cityButton = document.querySelector('.city-button button');
 const cityMenu = document.getElementById('city-menu');
@@ -85,60 +118,47 @@ function getCityKey(city){
 }
 
 function openCityCrimePage(city){
-  const name = getCityName(city, currentLang);
-  if(!name){
+  if(isSimplePage){
     return;
   }
+  setActiveCity(city);
+}
+
+function setActiveCity(city){
+  if(!city){
+    return;
+  }
+  activeCity = city;
   const cityKey = getCityKey(city);
-  const cityRu = city.ru || city.name_ru || '';
-  const cityUk = city.uk || city.name_uk || '';
-  const cityEn = city.en || city.name_en || '';
-  const newTab = window.open('about:blank', '_blank');
-  if(!newTab){
+  document.body.dataset.city = cityKey;
+  document.body.dataset.cityRu = city.ru || city.name_ru || '';
+  document.body.dataset.cityUk = city.uk || city.name_uk || '';
+  document.body.dataset.cityEn = city.en || city.name_en || '';
+  document.body.classList.add('city-mode');
+  updateCityPageTitle();
+  updateCityInfo(city);
+  stopLvivRotation();
+  if(cityKey === 'mariupol'){
+    loadMariupolPhotos();
+  }else{
+    stopMariupolRotation();
+  }
+}
+
+function clearActiveCity(){
+  if(isSimplePage){
     return;
   }
-  const header = document.querySelector('.site-header');
-  const headerClone = header ? header.cloneNode(true) : null;
-  if(headerClone){
-    const menu = headerClone.querySelector('#city-menu');
-    if(menu){
-      menu.classList.remove('open');
-      menu.setAttribute('aria-hidden', 'true');
-    }
-    const cityWrap = headerClone.querySelector('.city-button');
-    if(cityWrap){
-      cityWrap.classList.remove('active');
-    }
-  }
-  const headerHtml = headerClone ? headerClone.outerHTML : '';
-  const stylesheetUrl = new URL('styles.css', window.location.href).toString();
-  const configUrl = new URL('config.js', window.location.href).toString();
-  const scriptUrl = new URL('scripts.js', window.location.href).toString();
-  const title = buildCrimeTitle(name);
-  const timerBlock = `
-    <main class="main">
-      <div class="layout">
-        <div class="timer-wrap">
-          <div class="timer-title" data-i18n="timer_title">
-            ВОЙНА, КОТОРУЮ РАЗВЯЗАЛ ЛИЧНО ПУТИН, ПРОДОЛЖАЕТСЯ:
-          </div>
-          <div class="timer" id="timer"></div>
-        </div>
-      </div>
-    </main>
-  `;
-  const footerBlock = `
-    <footer class="site-footer">
-      <div class="author">
-        <span class="yellow"></span>
-        <span class="blue"></span>
-      </div>
-    </footer>
-  `;
-  newTab.document.open();
-  newTab.document.write(`<!doctype html><html lang="${currentLang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>${title}</title><link rel="icon" href="data:,"><link rel="stylesheet" href="${stylesheetUrl}"></head><body data-simple-page="true" data-city="${cityKey}" data-city-ru="${cityRu}" data-city-uk="${cityUk}" data-city-en="${cityEn}">${headerHtml}${timerBlock}${footerBlock}<script src="${configUrl}"></script><script src="${scriptUrl}"></script></body></html>`);
-  newTab.document.close();
-  newTab.document.title = title;
+  activeCity = null;
+  delete document.body.dataset.city;
+  delete document.body.dataset.cityRu;
+  delete document.body.dataset.cityUk;
+  delete document.body.dataset.cityEn;
+  document.body.classList.remove('city-mode');
+  updateCityPageTitle();
+  updateCityInfo(null);
+  stopMariupolRotation();
+  startLvivRotation();
 }
 
 function getCityName(city, lang){
@@ -182,7 +202,7 @@ function renderCityList(){
 
 async function loadCities(){
   try{
-    const res = await fetch('goroda.json', { cache: 'no-store' });
+    const res = await fetch('data/goroda.json', { cache: 'no-store' });
     if(!res.ok){
       throw new Error('Cities fetch failed');
     }
@@ -285,7 +305,7 @@ function getCreditLabel(){
 }
 
 function updateLangButtons(lang){
-  document.querySelectorAll('.lang-switch button').forEach((button)=>{
+  document.querySelectorAll('.lang-switch button[data-lang]').forEach((button)=>{
     const isActive = button.dataset.lang === lang;
     button.classList.toggle('active', isActive);
     button.setAttribute('aria-pressed', String(isActive));
@@ -316,26 +336,58 @@ function applyTranslations(lang){
   updateCityPageTitle();
 }
 
-function getSimplePageCityName(lang){
-  if(!isSimplePage){
-    return '';
+function getActiveCityName(lang){
+  if(activeCity){
+    return getCityName(activeCity, lang);
   }
-  if(lang === 'uk'){
-    return document.body?.dataset?.cityUk || '';
+  if(isSimplePage){
+    if(lang === 'uk'){
+      return document.body?.dataset?.cityUk || '';
+    }
+    if(lang === 'en'){
+      return document.body?.dataset?.cityEn || '';
+    }
+    return document.body?.dataset?.cityRu || '';
   }
-  if(lang === 'en'){
-    return document.body?.dataset?.cityEn || '';
-  }
-  return document.body?.dataset?.cityRu || '';
+  return '';
 }
 
 function updateCityPageTitle(){
-  if(!isSimplePage){
-    return;
-  }
-  const name = getSimplePageCityName(currentLang);
+  const name = getActiveCityName(currentLang);
   if(name){
     document.title = buildCrimeTitle(name);
+    return;
+  }
+  if(!isSimplePage){
+    document.title = defaultTitle;
+  }
+}
+
+function updateCityInfo(city){
+  const container = document.querySelector('.city-info');
+  const items = document.querySelectorAll('.city-info-item[data-city-field]');
+  if(!items.length){
+    return;
+  }
+  let hasActive = false;
+  items.forEach((item)=>{
+    item.classList.remove('is-active');
+    if(!city){
+      return;
+    }
+    const field = item.dataset.cityField;
+    if(!field){
+      return;
+    }
+    const value = city[field];
+    const isActive = Array.isArray(value) ? value.length > 0 : Boolean(value);
+    if(isActive){
+      item.classList.add('is-active');
+      hasActive = true;
+    }
+  });
+  if(container){
+    container.classList.toggle('has-items', hasActive);
   }
 }
 
@@ -351,10 +403,94 @@ function setLanguage(lang){
   }
 }
 
-document.querySelectorAll('.lang-switch button').forEach((button)=>{
+document.querySelectorAll('.lang-switch button[data-lang]').forEach((button)=>{
   button.addEventListener('click', ()=>{
     setLanguage(button.dataset.lang);
   });
+});
+
+const backButton = document.querySelector('.back-button');
+if(backButton){
+  backButton.addEventListener('click', ()=>{
+    clearActiveCity();
+  });
+}
+
+const sourcesModal = document.getElementById('sources-modal');
+const sourcesModalBody = document.getElementById('sources-modal-body');
+const sourcesTriggers = document.querySelectorAll('.city-info-item[data-city-field="authoritative_sources"]');
+
+function getSourceLabel(url){
+  try{
+    const hostname = new URL(url).hostname.replace(/^www\./, '');
+    if(hostname === 'ohchr.org'){
+      return 'OHCHR';
+    }
+    if(hostname === 'amnesty.org'){
+      return 'Amnesty International';
+    }
+    if(hostname === 'hrw.org'){
+      return 'Human Rights Watch';
+    }
+    return hostname;
+  }catch{
+    return url;
+  }
+}
+
+function openSourcesModal(){
+  if(!sourcesModal || !sourcesModalBody || !activeCity){
+    return;
+  }
+  const sources = Array.isArray(activeCity.authoritative_sources)
+    ? activeCity.authoritative_sources
+    : [];
+  if(!sources.length){
+    return;
+  }
+  sourcesModalBody.innerHTML = '';
+  sources.forEach((url)=>{
+    const card = document.createElement('a');
+    card.className = 'source-card';
+    card.href = url;
+    card.target = '_blank';
+    card.rel = 'noreferrer';
+    const label = document.createElement('strong');
+    label.textContent = getSourceLabel(url);
+    const detail = document.createElement('span');
+    detail.textContent = url;
+    card.appendChild(label);
+    card.appendChild(detail);
+    sourcesModalBody.appendChild(card);
+  });
+  sourcesModal.classList.add('is-open');
+  sourcesModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeSourcesModal(){
+  if(!sourcesModal){
+    return;
+  }
+  sourcesModal.classList.remove('is-open');
+  sourcesModal.setAttribute('aria-hidden', 'true');
+}
+
+sourcesTriggers.forEach((trigger)=>{
+  trigger.addEventListener('click', ()=>{
+    if(trigger.classList.contains('is-active')){
+      openSourcesModal();
+    }
+  });
+});
+
+document.querySelectorAll('[data-modal-close]').forEach((el)=>{
+  el.addEventListener('click', closeSourcesModal);
+});
+
+document.addEventListener('keydown', (event)=>{
+  if(event.key === 'Escape' && sourcesModal?.classList.contains('is-open')){
+    closeSourcesModal();
+  }
 });
 
 setLanguage(getInitialLang());
@@ -559,9 +695,7 @@ function buildSharePageUrl(photo){
   const origin = base || (window.location.origin && window.location.origin !== 'null'
     ? window.location.origin
     : 'https://in-driver.ru');
-  const filename = photo.src.split('/').pop() || 'lviv-01.jpg';
-  const slug = filename.replace(/\.[^.]+$/, '');
-  return `${origin}/share/${slug}.html`;
+  return origin.replace(/\/$/, '');
 }
 
 function updateShareLinks(photo){
@@ -620,6 +754,13 @@ function rotateMariupolBackground(){
   mariupolIndex = (mariupolIndex + 1) % mariupolPhotos.length;
 }
 
+function stopMariupolRotation(){
+  if(mariupolInterval){
+    clearInterval(mariupolInterval);
+    mariupolInterval = null;
+  }
+}
+
 async function loadMariupolPhotos(){
   try{
     const res = await fetch(MARIUPOL_PHOTOS_URL, { cache: 'no-store' });
@@ -632,18 +773,30 @@ async function loadMariupolPhotos(){
       return;
     }
     rotateMariupolBackground();
-    if(mariupolInterval){
-      clearInterval(mariupolInterval);
-    }
+    stopMariupolRotation();
     mariupolInterval = setInterval(rotateMariupolBackground, PHOTO_DURATION_MS);
   }catch(e){
     console.error('Mariupol photos load failed', e);
   }
 }
 
-if(!isSimplePage){
+function startLvivRotation(){
+  if(lvivInterval){
+    clearInterval(lvivInterval);
+  }
   rotateLvivBackground();
-  setInterval(rotateLvivBackground, PHOTO_DURATION_MS);
+  lvivInterval = setInterval(rotateLvivBackground, PHOTO_DURATION_MS);
+}
+
+function stopLvivRotation(){
+  if(lvivInterval){
+    clearInterval(lvivInterval);
+    lvivInterval = null;
+  }
+}
+
+if(!isSimplePage){
+  startLvivRotation();
 }else if(simplePageCityKey === 'mariupol'){
   loadMariupolPhotos();
 }

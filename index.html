@@ -19,7 +19,11 @@
 
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="data:,">
+<link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+<link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
+<link rel="manifest" href="favicon/site.webmanifest">
+<link rel="shortcut icon" href="favicon/favicon.ico">
 <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -34,6 +38,42 @@
       <button type="button" data-lang="uk">UA</button>
       <button type="button" data-lang="en">EN</button>
       <button type="button" data-lang="ru">RU</button>
+    </div>
+    <div class="lang-switch back-switch" role="group" aria-label="Back">
+      <button type="button" class="back-button" data-i18n="back_button">Назад</button>
+    </div>
+    <div class="city-info" aria-label="City info">
+      <div class="city-info-title" data-i18n="city_info_title">Военные преступления</div>
+      <div class="city-info-list">
+        <div class="city-info-item" data-city-field="major_destruction">
+          <img src="icons/major_destruction.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_major_destruction">Разрушения</span>
+        </div>
+        <div class="city-info-item" data-city-field="reported_war_crimes">
+          <img src="icons/reported_war_crimes.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_reported_war_crimes">Военные преступления</span>
+        </div>
+        <div class="city-info-item" data-city-field="missile_attacks">
+          <img src="icons/missile_attacks.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_missile_attacks">Ракетные удары</span>
+        </div>
+        <div class="city-info-item" data-city-field="air_strikes">
+          <img src="icons/air_strikes.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_air_strikes">Авиаудары</span>
+        </div>
+        <div class="city-info-item" data-city-field="siege">
+          <img src="icons/siege.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_siege">Осада</span>
+        </div>
+        <div class="city-info-item" data-city-field="weapon_type_reported">
+          <img src="icons/weapon_type_reported.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_weapon_type_reported">Вооружение</span>
+        </div>
+        <div class="city-info-item" data-city-field="authoritative_sources">
+          <img src="icons/authoritative_sources.svg" alt="" aria-hidden="true">
+          <span data-i18n="info_authoritative_sources">Источники</span>
+        </div>
+      </div>
     </div>
   </div>
   <div class="header-center">
@@ -100,6 +140,16 @@
 </main>
 </div>
 
+<div class="modal" id="sources-modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modal__backdrop" data-modal-close></div>
+  <div class="modal__panel" role="document">
+    <div class="modal__header">
+      <div class="modal__title" data-i18n="sources_modal_title">Источники</div>
+      <button type="button" class="modal__close" data-modal-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal__body" id="sources-modal-body"></div>
+  </div>
+</div>
 
 
 <footer class="site-footer">
