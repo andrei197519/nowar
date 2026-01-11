@@ -1,0 +1,85 @@
+{
+  "cities": [
+    {
+      "name_ru": "Мариуполь",
+      "name_en": "Mariupol",
+      "name_uk": "Маріуполь",
+      "region": "Donetsk Oblast",
+      "attack_start_date": "2022-02-24"
+    },
+    {
+      "name_ru": "Харьков",
+      "name_en": "Kharkiv",
+      "name_uk": "Харків",
+      "region": "Kharkiv Oblast",
+      "attack_start_date": "2022-02-24"
+    },
+    {
+      "name_ru": "Чернигов",
+      "name_en": "Chernihiv",
+      "name_uk": "Чернігів",
+      "region": "Chernihiv Oblast",
+      "attack_start_date": "2022-02-24"
+    },
+    {
+      "name_ru": "Северодонецк",
+      "name_en": "Sievierodonetsk",
+      "name_uk": "Сєвєродонецьк",
+      "region": "Luhansk Oblast",
+      "attack_start_date": "2022-03-01"
+    },
+    {
+      "name_ru": "Рубежное",
+      "name_en": "Rubizhne",
+      "name_uk": "Рубіжне",
+      "region": "Luhansk Oblast",
+      "attack_start_date": "2022-03-01"
+    },
+    {
+      "name_ru": "Лисичанск",
+      "name_en": "Lysychansk",
+      "name_uk": "Лисичанськ",
+      "region": "Luhansk Oblast",
+      "attack_start_date": "2022-04-01"
+    },
+    {
+      "name_ru": "Попасная",
+      "name_en": "Popasna",
+      "name_uk": "Попасна",
+      "region": "Luhansk Oblast",
+      "attack_start_date": "2022-03-10"
+    },
+    {
+      "name_ru": "Бахмут",
+      "name_en": "Bakhmut",
+      "name_uk": "Бахмут",
+      "region": "Donetsk Oblast",
+      "attack_start_date": "2022-08-01"
+    },
+    {
+      "name_ru": "Марьинка",
+      "name_en": "Maryinka",
+      "name_uk": "Мар’їнка",
+      "region": "Donetsk Oblast",
+      "attack_start_date": "2022-02-24"
+    },
+    {
+      "name_ru": "Изюм",
+      "name_en": "Izyum",
+      "name_uk": "Ізюм",
+      "region": "Kharkiv Oblast",
+      "attack_start_date": "2022-03-01"
+    },
+    {
+      "name_ru": "Волноваха",
+      "name_en": "Volnovakha",
+      "name_uk": "Волноваха",
+      "region": "Donetsk Oblast",
+      "attack_start_date": "2022-02-27"
+    }
+  ],
+  "notes": {
+    "attack_start_date": "Ориентировочная дата начала интенсивных атак или штурма города",
+    "language_fields": "name_ru — русский, name_en — английский, name_uk — украинский"
+  }
+}

@@ -19,6 +19,7 @@
 
 <meta name="twitter:card" content="summary_large_image">
 
+<link rel="icon" href="data:,">
 <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -27,13 +28,34 @@
 
 <div class="snow" id="snow"></div>
 
+<header class="site-header">
+  <div class="header-left">
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-lang="uk">UK</button>
+      <button type="button" data-lang="en">EN</button>
+      <button type="button" data-lang="ru">RU</button>
+    </div>
+  </div>
+  <div class="header-center">
+    <div class="city-button" role="group" aria-label="City">
+      <button type="button" data-i18n="city_button">ГОРОД</button>
+    </div>
+    <div class="city-menu" id="city-menu" aria-hidden="true">
+      <div class="city-menu-inner">
+        <ul class="city-list" id="city-list"></ul>
+      </div>
+    </div>
+  </div>
+  <div class="header-right">
+    <audio class="player" src="Assets/Audio/Music.mp3" autoplay loop controls></audio>
+  </div>
+</header>
 
-<audio class="player" src="Assets/Audio/Music.mp3" autoplay loop controls></audio>
-
+<main class="main">
 <div class="layout">
 
 <div class="timer-wrap">
-  <div class="timer-title">
+  <div class="timer-title" data-i18n="timer_title">
     ВОЙНА, КОТОРУЮ РАЗВЯЗАЛ ЛИЧНО ПУТИН, ПРОДОЛЖАЕТСЯ:
   </div>
   <div class="timer" id="timer"></div>
@@ -41,26 +63,26 @@
 
 
 <div class="losses">
-  <div class="losses-title">ПОТЕРИ</div>
+  <div class="losses-title" data-i18n="losses_title">ПОТЕРИ</div>
   <div class="flags" aria-hidden="true">
     <div class="flag ukr"></div>
     <div class="flag rus"></div>
   </div>
   <div class="losses-values">
-    <div class="losses-value">400&nbsp;т.<br>человек</div>
-    <div class="losses-value">1&nbsp;млн.<br>человек</div>
+    <div class="losses-value" data-i18n-html="losses_value_1">400&nbsp;т.<br>человек</div>
+    <div class="losses-value" data-i18n-html="losses_value_2">1&nbsp;млн.<br>человек</div>
   </div>
 </div>
 
 
 <div class="wrap">
   <div class="panel">
-    <h1>STOP THE WAR</h1>
-    <p class="blue">НЕТ ВОЙНЕ!</p>
-    <p class="yellow">FREEDOM FOR UKRAINE</p>
+    <h1 data-i18n="hero_title">STOP THE WAR</h1>
+    <p class="blue" data-i18n="hero_line_1">НЕТ ВОЙНЕ!</p>
+    <p class="yellow" data-i18n="hero_line_2">FREEDOM FOR UKRAINE</p>
     <hr>
-    <p class="blue">PUTIN IS A WAR CRIMINAL</p>
-    <p class="red">END THE WAR NOW</p>
+    <p class="blue" data-i18n="hero_line_3">PUTIN IS A WAR CRIMINAL</p>
+    <p class="red" data-i18n="hero_line_4">END THE WAR NOW</p>
 
     
     <div class="social">
@@ -72,17 +94,20 @@
       <a class="tg" href="https://t.me/share/url?url=https://in-driver.ru" target="_blank">tg</a>
       <a class="rd" href="https://www.reddit.com/submit?url=https://in-driver.ru" target="_blank">r</a>
       <a class="mail" href="mailto:nowar@putinpidoras.shop?subject=STOP%20THE%20WAR&body=https://in-driver.ru">@</a>
-    </div>
-  </div>
 </div>
 </div>
+</div>
+</main>
+</div>
 
 
 
+<footer class="site-footer">
 <div class="author">
   <span class="yellow">Borodianka, Kyiv Oblast, 6 April.</span>
   <span class="blue"> Photo: Oleksandr Ratushniak / UNDP Ukraine</span>
 </div>
+</footer>
 
 <script src="config.js"></script>
 <script src="scripts.js"></script>

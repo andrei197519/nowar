@@ -2,6 +2,235 @@
 const start = Date.parse('2022-02-24T03:00:00Z');
 const timer = document.getElementById('timer');
 
+const PHOTO_DURATION_MS = 30000;
+const HERO_VISIBLE_MS = 5000;
+const MARQUEE_DURATION_MS = PHOTO_DURATION_MS;
+
+const translations = {
+  ru: {
+    timer_title: 'ВОЙНА, КОТОРУЮ РАЗВЯЗАЛ ЛИЧНО ПУТИН, ПРОДОЛЖАЕТСЯ:',
+    losses_title: 'ПОТЕРИ',
+    losses_value_1: '400&nbsp;т.<br>человек',
+    losses_value_2: '1&nbsp;млн.<br>человек',
+    hero_title: 'STOP THE WAR',
+    hero_line_1: 'НЕТ ВОЙНЕ!',
+    hero_line_2: 'СВОБОДУ УКРАИНЕ',
+    hero_line_3: 'ПУТИН - ВОЕННЫЙ ПРЕСТУПНИК',
+    hero_line_4: 'ПРЕКРАТИТЕ ВОЙНУ СЕЙЧАС',
+    city_button: 'ПРЕСТУПЛЕНИЯ ПУТИНА В УКРАИНЕ',
+  },
+  uk: {
+    timer_title: "ВІЙНА, ЯКУ РОЗВ'ЯЗАВ ОСОБИСТО ПУТІН, ТРИВАЄ:",
+    losses_title: 'ВТРАТИ',
+    losses_value_1: '400&nbsp;тис.<br>людей',
+    losses_value_2: '1&nbsp;млн<br>людей',
+    hero_title: 'ЗУПИНІТЬ ВІЙНУ',
+    hero_line_1: 'НІ ВІЙНІ!',
+    hero_line_2: 'СВОБОДУ УКРАЇНІ',
+    hero_line_3: 'ПУТІН - ВОЄННИЙ ЗЛОЧИНЕЦЬ',
+    hero_line_4: 'ЗУПИНІТЬ ВІЙНУ ЗАРАЗ',
+    city_button: 'ЗЛОЧИНИ ПУТІНА В УКРАЇНІ',
+  },
+  en: {
+    timer_title: 'THE WAR STARTED PERSONALLY BY PUTIN CONTINUES:',
+    losses_title: 'LOSSES',
+    losses_value_1: '400&nbsp;k<br>people',
+    losses_value_2: '1&nbsp;m<br>people',
+    hero_title: 'STOP THE WAR',
+    hero_line_1: 'NO TO WAR!',
+    hero_line_2: 'FREEDOM FOR UKRAINE',
+    hero_line_3: 'PUTIN IS A WAR CRIMINAL',
+    hero_line_4: 'END THE WAR NOW',
+    city_button: 'PUTIN CRIMES IN UKRAINE',
+  },
+};
+
+const timerLabels = {
+  ru: { days: 'ДНЕЙ', hours: 'ЧАСОВ', minutes: 'МИН', seconds: 'СЕК' },
+  uk: { days: 'ДНІВ', hours: 'ГОДИН', minutes: 'ХВ', seconds: 'СЕК' },
+  en: { days: 'DAYS', hours: 'HOURS', minutes: 'MIN', seconds: 'SEC' },
+};
+
+const creditLabels = {
+  ru: ' Фото: ',
+  uk: ' Фото: ',
+  en: ' Photo: ',
+};
+
+const availableLangs = ['uk', 'en', 'ru'];
+let currentLang = 'ru';
+let currentPhoto = null;
+let heroTimeout = null;
+let cities = [];
+
+const cityButton = document.querySelector('.city-button button');
+const cityMenu = document.getElementById('city-menu');
+const cityList = document.getElementById('city-list');
+
+function getCityName(city, lang){
+  if(lang === 'uk'){
+    return city.name_uk;
+  }
+  if(lang === 'en'){
+    return city.name_en;
+  }
+  return city.name_ru;
+}
+
+function renderCityList(){
+  if(!cityList){
+    return;
+  }
+  cityList.innerHTML = '';
+  if(!cities.length){
+    return;
+  }
+  cities.forEach((city)=>{
+    const item = document.createElement('li');
+    item.textContent = getCityName(city, currentLang);
+    cityList.appendChild(item);
+  });
+}
+
+async function loadCities(){
+  try{
+    const res = await fetch('goroda.json', { cache: 'no-store' });
+    if(!res.ok){
+      throw new Error('Cities fetch failed');
+    }
+    const data = await res.json();
+    cities = Array.isArray(data.cities) ? data.cities : [];
+    renderCityList();
+  }catch(e){
+    console.error('Cities load failed', e);
+  }
+}
+
+function setCityMenuOpen(isOpen){
+  if(!cityMenu){
+    return;
+  }
+  cityMenu.classList.toggle('open', isOpen);
+  cityMenu.setAttribute('aria-hidden', String(!isOpen));
+  if(cityButton){
+    cityButton.parentElement.classList.toggle('active', isOpen);
+  }
+  if(isOpen){
+    if(heroTimeout){
+      clearTimeout(heroTimeout);
+    }
+    document.body.classList.add('hero-hidden');
+  }else{
+    showHeroNow();
+  }
+}
+
+if(cityButton){
+  cityButton.addEventListener('click', ()=>{
+    const isOpen = cityMenu && cityMenu.classList.contains('open');
+    setCityMenuOpen(!isOpen);
+  });
+}
+
+document.addEventListener('click', (event)=>{
+  if(!cityMenu || !cityButton){
+    return;
+  }
+  const target = event.target;
+  if(cityMenu.contains(target) || cityButton.contains(target)){
+    return;
+  }
+  setCityMenuOpen(false);
+});
+
+function getInitialLang(){
+  const stored = localStorage.getItem('nowar_lang');
+  if(stored && availableLangs.includes(stored)){
+    return stored;
+  }
+  const browserLang = (navigator.language || '').toLowerCase();
+  if(browserLang.startsWith('uk')){
+    return 'uk';
+  }
+  if(browserLang.startsWith('en')){
+    return 'en';
+  }
+  if(browserLang.startsWith('ru')){
+    return 'ru';
+  }
+  return 'ru';
+}
+
+function showHeroNow(){
+  document.body.classList.remove('hero-hidden');
+  if(heroTimeout){
+    clearTimeout(heroTimeout);
+  }
+  heroTimeout = setTimeout(()=>{
+    document.body.classList.add('hero-hidden');
+  }, HERO_VISIBLE_MS);
+}
+
+function getTimerLabels(){
+  return timerLabels[currentLang] || timerLabels.ru;
+}
+
+function getCreditLabel(){
+  return creditLabels[currentLang] || creditLabels.ru;
+}
+
+function updateLangButtons(lang){
+  document.querySelectorAll('.lang-switch button').forEach((button)=>{
+    const isActive = button.dataset.lang === lang;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-pressed', String(isActive));
+  });
+}
+
+function applyTranslations(lang){
+  const bundle = translations[lang] || translations.ru;
+  document.querySelectorAll('[data-i18n]').forEach((el)=>{
+    const key = el.dataset.i18n;
+    if(bundle[key]){
+      el.textContent = bundle[key];
+    }
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach((el)=>{
+    const key = el.dataset.i18nHtml;
+    if(bundle[key]){
+      el.innerHTML = bundle[key];
+    }
+  });
+  document.documentElement.lang = lang;
+  updateLangButtons(lang);
+  renderCityList();
+  tick();
+  if(currentPhoto){
+    updateTicker(currentPhoto);
+  }
+}
+
+function setLanguage(lang){
+  if(!availableLangs.includes(lang)){
+    return;
+  }
+  currentLang = lang;
+  localStorage.setItem('nowar_lang', lang);
+  applyTranslations(lang);
+  if(document.body.classList.contains('hero-hidden')){
+    showHeroNow();
+  }
+}
+
+document.querySelectorAll('.lang-switch button').forEach((button)=>{
+  button.addEventListener('click', ()=>{
+    setLanguage(button.dataset.lang);
+  });
+});
+
+setLanguage(getInitialLang());
+loadCities();
+
 function tick(){
   const diff = Math.floor((Date.now() - start) / 1000);
 
@@ -11,11 +240,12 @@ function tick(){
   const seconds = diff % 60;
 
  
+  const labels = getTimerLabels();
   timer.innerHTML = `
-    <div class="t"><b>${days}</b><span>ДНЕЙ</span></div>
-    <div class="t"><b>${hours}</b><span>ЧАСОВ</span></div>
-    <div class="t"><b>${minutes}</b><span>МИН</span></div>
-    <div class="t"><b>${seconds}</b><span>СЕК</span></div>
+    <div class="t"><b>${days}</b><span>${labels.days}</span></div>
+    <div class="t"><b>${hours}</b><span>${labels.hours}</span></div>
+    <div class="t"><b>${minutes}</b><span>${labels.minutes}</span></div>
+    <div class="t"><b>${seconds}</b><span>${labels.seconds}</span></div>
   `;
 }
 tick();
@@ -36,98 +266,151 @@ setInterval(()=>{
 },300);
 
 
-const PHOTO_DURATION_MS = 30000;
-const HERO_VISIBLE_MS = 5000;
-const MARQUEE_DURATION_MS = PHOTO_DURATION_MS;
-
 const lvivPhotos = [
   {
     src: 'Assets/ap-lviv/lviv-01.jpg',
-    caption: 'Христианка молится у мемориала павшим солдатам в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Христианка молится у мемориала павшим солдатам в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Християнка молиться біля меморіалу полеглим солдатам у гарнізонному храмі Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'A Christian woman prays at a memorial to fallen soldiers in the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-02.jpg',
-    caption: 'Христианка молится во время воскресной службы в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Христианка молится во время воскресной службы в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Християнка молиться під час недільної служби в гарнізонному храмі Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'A Christian woman prays during Sunday service in the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-03.jpg',
-    caption: 'Использованные военные боеприпасы и христианские иконы украшают мемориал павшим солдатам в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Использованные военные боеприпасы и христианские иконы украшают мемориал павшим солдатам в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Використані військові боєприпаси та християнські ікони прикрашають меморіал полеглим солдатам у гарнізонному храмі Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'Used military ammunition and Christian icons decorate a memorial to fallen soldiers in the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-04.jpg',
-    caption: 'Христиане присутствуют на воскресной службе в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Христиане присутствуют на воскресной службе в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Християни присутні на недільній службі в гарнізонному храмі Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'Christians attend Sunday service in the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-05.jpg',
-    caption: 'Украинский мужчина в военной форме молится внутри гарнизонного храма Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Украинский мужчина в военной форме молится внутри гарнизонного храма Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Український чоловік у військовій формі молиться всередині гарнізонного храму Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'A Ukrainian man in military uniform prays inside the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-06.jpg',
-    caption: 'Христиане стоят рядом с мемориалом павшим солдатам во время воскресной службы в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Христиане стоят рядом с мемориалом павшим солдатам во время воскресной службы в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Християни стоять поруч із меморіалом полеглим солдатам під час недільної служби в гарнізонному храмі Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'Christians stand near a memorial to fallen soldiers during Sunday service in the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-07.jpg',
-    caption: 'Христианка молится перед фотографиями павших солдат в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Христианка молится перед фотографиями павших солдат в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Християнка молиться перед фотографіями полеглих солдатів у гарнізонному храмі Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'A Christian woman prays before photos of fallen soldiers in the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-08.jpg',
-    caption: 'Христиане присутствуют на воскресной службе в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Христиане присутствуют на воскресной службе в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Християни присутні на недільній службі в гарнізонному храмі Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'Christians attend Sunday service in the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-09.jpg',
-    caption: 'Христиане присутствуют на воскресной службе в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Христиане присутствуют на воскресной службе в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Християни присутні на недільній службі в гарнізонному храмі Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'Christians attend Sunday service in the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-10.jpg',
-    caption: 'Украинские греко-католические священники проводят воскресную мессу в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Украинские греко-католические священники проводят воскресную мессу в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Українські греко-католицькі священники проводять недільну месу в гарнізонному храмі Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'Ukrainian Greek Catholic priests lead Sunday Mass in the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-11.jpg',
-    caption: 'Христиане зажигают свечи и молятся после воскресной мессы внутри гарнизонного храма Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Христиане зажигают свечи и молятся после воскресной мессы внутри гарнизонного храма Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Християни запалюють свічки й моляться після недільної меси всередині гарнізонного храму Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'Christians light candles and pray after Sunday Mass inside the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-12.jpg',
-    caption: 'Пожертвованная одежда и коврики для сна хранятся внутри церкви во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Пожертвованная одежда и коврики для сна хранятся внутри церкви во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Пожертвуваний одяг і килимки для сну зберігаються всередині церкви у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'Donated clothing and sleeping mats are stored inside a church in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-13.jpg',
-    caption: 'Украинцы в военной форме разговаривают внутри гарнизонного храма Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Украинцы в военной форме разговаривают внутри гарнизонного храма Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Українці у військовій формі розмовляють всередині гарнізонного храму Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'Ukrainians in military uniform talk inside the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
   {
     src: 'Assets/ap-lviv/lviv-14.jpg',
-    caption: 'Христиане присутствуют на воскресной службе в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+    caption: {
+      ru: 'Христиане присутствуют на воскресной службе в гарнизонном храме Святых Петра и Павла во Львове, Западная Украина, воскресенье, 6 марта 2022 года.',
+      uk: 'Християни присутні на недільній службі в гарнізонному храмі Святих Петра і Павла у Львові, Західна Україна, неділя, 6 березня 2022 року.',
+      en: 'Christians attend Sunday service in the Garrison Church of Saints Peter and Paul in Lviv, western Ukraine, Sunday, March 6, 2022.',
+    },
     credit: 'AP Photo/Bernat Armangue',
   },
 ];
 
 let lvivIndex = 0;
-let heroTimeout = null;
-
 function updateTicker(photo){
   const author = document.querySelector('.author');
   if(!author){
     return;
   }
+  const caption = (photo.caption && typeof photo.caption === 'object')
+    ? (photo.caption[currentLang] || photo.caption.ru || '')
+    : (photo.caption || '');
   author.innerHTML = '';
   const captionSpan = document.createElement('span');
   captionSpan.className = 'yellow';
-  captionSpan.textContent = photo.caption;
+  captionSpan.textContent = caption;
   const creditSpan = document.createElement('span');
   creditSpan.className = 'blue';
-  creditSpan.textContent = ` Photo: ${photo.credit}`;
+  creditSpan.textContent = `${getCreditLabel()}${photo.credit}`;
   author.appendChild(captionSpan);
   author.appendChild(creditSpan);
 
@@ -175,6 +458,7 @@ function rotateLvivBackground(){
     return;
   }
   const photo = lvivPhotos[lvivIndex];
+  currentPhoto = photo;
   document.body.classList.remove('hero-hidden');
   if(heroTimeout){
     clearTimeout(heroTimeout);
@@ -335,24 +619,26 @@ async function translateNewsItems(items){
 }
 
 async function loadNpuNews(){
+  const container = document.getElementById('npu-news');
   try{
-    const container = document.getElementById('npu-news');
     if(container){
       container.textContent = 'Загружаем новости...';
     }
     const res = await fetch(NPU_NEWS_DATA_URL, { cache: 'no-store' });
     if(!res.ok){
-      throw new Error('NPU data fetch failed');
+      if(container){
+        container.textContent = 'Новости недоступны.';
+      }
+      return;
     }
     const data = await res.json();
     const items = Array.isArray(data.items) ? data.items : [];
     const translated = await translateNewsItems(items);
     renderNpuNews(translated);
   }catch(e){
-    console.error('NPU news failed', e);
-    const container = document.getElementById('npu-news');
+    console.warn('NPU news unavailable', e);
     if(container){
-      container.textContent = 'Не удалось загрузить новости.';
+      container.textContent = 'Новости недоступны.';
     }
   }
 }
