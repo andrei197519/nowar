@@ -532,6 +532,18 @@ hr{
   pointer-events:auto;
 }
 
+body[data-simple-page="true"] .layout{
+  padding-top:0;
+}
+
+body[data-simple-page="true"] .timer-wrap{
+  transform:translateY(-20px);
+}
+
+body[data-simple-page="true"].menu-open .layout{
+  padding-top:0;
+}
+
 .site-header > *{
   pointer-events:auto;
 }

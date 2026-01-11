@@ -1,6 +1,8 @@
 
 const start = Date.parse('2022-02-24T03:00:00Z');
 const timer = document.getElementById('timer');
+const isSimplePage = document.body?.dataset?.simplePage === 'true';
+const simplePageCityKey = document.body?.dataset?.city || '';
 
 const PHOTO_DURATION_MS = 30000;
 const HERO_VISIBLE_MS = 5000;
@@ -67,14 +69,86 @@ const cityButton = document.querySelector('.city-button button');
 const cityMenu = document.getElementById('city-menu');
 const cityList = document.getElementById('city-list');
 
+function buildCrimeTitle(cityName){
+  if(currentLang === 'uk'){
+    return `Злочини: ${cityName}`;
+  }
+  if(currentLang === 'en'){
+    return `Crimes: ${cityName}`;
+  }
+  return `Преступления: ${cityName}`;
+}
+
+function getCityKey(city){
+  const raw = city.en || city.name_en || city.ru || city.name_ru || '';
+  return raw.toLowerCase().replace(/\s+/g, '-');
+}
+
+function openCityCrimePage(city){
+  const name = getCityName(city, currentLang);
+  if(!name){
+    return;
+  }
+  const cityKey = getCityKey(city);
+  const cityRu = city.ru || city.name_ru || '';
+  const cityUk = city.uk || city.name_uk || '';
+  const cityEn = city.en || city.name_en || '';
+  const newTab = window.open('about:blank', '_blank');
+  if(!newTab){
+    return;
+  }
+  const header = document.querySelector('.site-header');
+  const headerClone = header ? header.cloneNode(true) : null;
+  if(headerClone){
+    const menu = headerClone.querySelector('#city-menu');
+    if(menu){
+      menu.classList.remove('open');
+      menu.setAttribute('aria-hidden', 'true');
+    }
+    const cityWrap = headerClone.querySelector('.city-button');
+    if(cityWrap){
+      cityWrap.classList.remove('active');
+    }
+  }
+  const headerHtml = headerClone ? headerClone.outerHTML : '';
+  const stylesheetUrl = new URL('styles.css', window.location.href).toString();
+  const configUrl = new URL('config.js', window.location.href).toString();
+  const scriptUrl = new URL('scripts.js', window.location.href).toString();
+  const title = buildCrimeTitle(name);
+  const timerBlock = `
+    <main class="main">
+      <div class="layout">
+        <div class="timer-wrap">
+          <div class="timer-title" data-i18n="timer_title">
+            ВОЙНА, КОТОРУЮ РАЗВЯЗАЛ ЛИЧНО ПУТИН, ПРОДОЛЖАЕТСЯ:
+          </div>
+          <div class="timer" id="timer"></div>
+        </div>
+      </div>
+    </main>
+  `;
+  const footerBlock = `
+    <footer class="site-footer">
+      <div class="author">
+        <span class="yellow"></span>
+        <span class="blue"></span>
+      </div>
+    </footer>
+  `;
+  newTab.document.open();
+  newTab.document.write(`<!doctype html><html lang="${currentLang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>${title}</title><link rel="icon" href="data:,"><link rel="stylesheet" href="${stylesheetUrl}"></head><body data-simple-page="true" data-city="${cityKey}" data-city-ru="${cityRu}" data-city-uk="${cityUk}" data-city-en="${cityEn}">${headerHtml}${timerBlock}${footerBlock}<script src="${configUrl}"></script><script src="${scriptUrl}"></script></body></html>`);
+  newTab.document.close();
+  newTab.document.title = title;
+}
+
 function getCityName(city, lang){
   if(lang === 'uk'){
-    return city.name_uk;
+    return city.uk || city.name_uk || '';
   }
   if(lang === 'en'){
-    return city.name_en;
+    return city.en || city.name_en || '';
   }
-  return city.name_ru;
+  return city.ru || city.name_ru || '';
 }
 
 function renderCityList(){
@@ -87,7 +161,21 @@ function renderCityList(){
   }
   cities.forEach((city)=>{
     const item = document.createElement('li');
+    item.className = 'city-item';
+    item.setAttribute('role', 'button');
+    item.tabIndex = 0;
     item.textContent = getCityName(city, currentLang);
+    item.addEventListener('click', ()=>{
+      openCityCrimePage(city);
+      setCityMenuOpen(false);
+    });
+    item.addEventListener('keydown', (event)=>{
+      if(event.key === 'Enter' || event.key === ' '){
+        event.preventDefault();
+        openCityCrimePage(city);
+        setCityMenuOpen(false);
+      }
+    });
     cityList.appendChild(item);
   });
 }
@@ -99,7 +187,15 @@ async function loadCities(){
       throw new Error('Cities fetch failed');
     }
     const data = await res.json();
-    cities = Array.isArray(data.cities) ? data.cities : [];
+    if(Array.isArray(data.reported_war_crimes_locations)){
+      cities = data.reported_war_crimes_locations;
+    }else if(Array.isArray(data.major_damage_cities)){
+      cities = data.major_damage_cities;
+    }else if(Array.isArray(data.cities)){
+      cities = data.cities;
+    }else{
+      cities = [];
+    }
     renderCityList();
   }catch(e){
     console.error('Cities load failed', e);
@@ -115,13 +211,19 @@ function setCityMenuOpen(isOpen){
   if(cityButton){
     cityButton.parentElement.classList.toggle('active', isOpen);
   }
-  if(isOpen){
-    if(heroTimeout){
-      clearTimeout(heroTimeout);
+  if(isSimplePage){
+    document.body.classList.toggle('menu-open', isOpen);
+    return;
+  }
+  if(!isSimplePage){
+    if(isOpen){
+      if(heroTimeout){
+        clearTimeout(heroTimeout);
+      }
+      document.body.classList.add('hero-hidden');
+    }else{
+      showHeroNow();
     }
-    document.body.classList.add('hero-hidden');
-  }else{
-    showHeroNow();
   }
 }
 
@@ -162,6 +264,9 @@ function getInitialLang(){
 }
 
 function showHeroNow(){
+  if(isSimplePage){
+    return;
+  }
   document.body.classList.remove('hero-hidden');
   if(heroTimeout){
     clearTimeout(heroTimeout);
@@ -208,6 +313,30 @@ function applyTranslations(lang){
   if(currentPhoto){
     updateTicker(currentPhoto);
   }
+  updateCityPageTitle();
+}
+
+function getSimplePageCityName(lang){
+  if(!isSimplePage){
+    return '';
+  }
+  if(lang === 'uk'){
+    return document.body?.dataset?.cityUk || '';
+  }
+  if(lang === 'en'){
+    return document.body?.dataset?.cityEn || '';
+  }
+  return document.body?.dataset?.cityRu || '';
+}
+
+function updateCityPageTitle(){
+  if(!isSimplePage){
+    return;
+  }
+  const name = getSimplePageCityName(currentLang);
+  if(name){
+    document.title = buildCrimeTitle(name);
+  }
 }
 
 function setLanguage(lang){
@@ -217,7 +346,7 @@ function setLanguage(lang){
   currentLang = lang;
   localStorage.setItem('nowar_lang', lang);
   applyTranslations(lang);
-  if(document.body.classList.contains('hero-hidden')){
+  if(!isSimplePage && document.body.classList.contains('hero-hidden')){
     showHeroNow();
   }
 }
@@ -395,6 +524,11 @@ const lvivPhotos = [
   },
 ];
 
+const MARIUPOL_PHOTOS_URL = 'data/mariupol-photos.json';
+let mariupolPhotos = [];
+let mariupolIndex = 0;
+let mariupolInterval = null;
+
 let lvivIndex = 0;
 function updateTicker(photo){
   const author = document.querySelector('.author');
@@ -473,8 +607,46 @@ function rotateLvivBackground(){
   lvivIndex = (lvivIndex + 1) % lvivPhotos.length;
 }
 
-rotateLvivBackground();
-setInterval(rotateLvivBackground, PHOTO_DURATION_MS);
+function rotateMariupolBackground(){
+  if(!mariupolPhotos.length){
+    return;
+  }
+  const photo = mariupolPhotos[mariupolIndex];
+  currentPhoto = photo;
+  document.body.style.backgroundImage =
+    `linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)), url('${photo.src}')`;
+  updateTicker(photo);
+  updateShareLinks(photo);
+  mariupolIndex = (mariupolIndex + 1) % mariupolPhotos.length;
+}
+
+async function loadMariupolPhotos(){
+  try{
+    const res = await fetch(MARIUPOL_PHOTOS_URL, { cache: 'no-store' });
+    if(!res.ok){
+      throw new Error('Mariupol photos fetch failed');
+    }
+    const data = await res.json();
+    mariupolPhotos = Array.isArray(data) ? data : [];
+    if(!mariupolPhotos.length){
+      return;
+    }
+    rotateMariupolBackground();
+    if(mariupolInterval){
+      clearInterval(mariupolInterval);
+    }
+    mariupolInterval = setInterval(rotateMariupolBackground, PHOTO_DURATION_MS);
+  }catch(e){
+    console.error('Mariupol photos load failed', e);
+  }
+}
+
+if(!isSimplePage){
+  rotateLvivBackground();
+  setInterval(rotateLvivBackground, PHOTO_DURATION_MS);
+}else if(simplePageCityKey === 'mariupol'){
+  loadMariupolPhotos();
+}
 
 
 const NPU_NEWS_DATA_URL = 'data/npu-news.json';

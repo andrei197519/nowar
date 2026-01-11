@@ -1,0 +1,222 @@
+{
+  "major_destruction": {
+    "icon": "icons/major_destruction.svg",
+    "cities": [
+      {
+        "ru": "Мариуполь",
+        "uk": "Маріуполь",
+        "en": "Mariupol"
+      },
+      {
+        "ru": "Харьков",
+        "uk": "Харків",
+        "en": "Kharkiv"
+      },
+      {
+        "ru": "Чернигов",
+        "uk": "Чернігів",
+        "en": "Chernihiv"
+      },
+      {
+        "ru": "Изюм",
+        "uk": "Ізюм",
+        "en": "Izyum"
+      },
+      {
+        "ru": "Киев",
+        "uk": "Київ",
+        "en": "Kyiv"
+      }
+    ]
+  },
+  "reported_war_crimes": {
+    "icon": "icons/reported_war_crimes.svg",
+    "cities": [
+      {
+        "ru": "Мариуполь",
+        "uk": "Маріуполь",
+        "en": "Mariupol"
+      },
+      {
+        "ru": "Харьков",
+        "uk": "Харків",
+        "en": "Kharkiv"
+      },
+      {
+        "ru": "Львов",
+        "uk": "Львів",
+        "en": "Lviv"
+      },
+      {
+        "ru": "Чернигов",
+        "uk": "Чернігів",
+        "en": "Chernihiv"
+      },
+      {
+        "ru": "Изюм",
+        "uk": "Ізюм",
+        "en": "Izyum"
+      },
+      {
+        "ru": "Киев",
+        "uk": "Київ",
+        "en": "Kyiv"
+      },
+      {
+        "ru": "Буча",
+        "uk": "Буча",
+        "en": "Bucha"
+      },
+      {
+        "ru": "Херсон",
+        "uk": "Херсон",
+        "en": "Kherson"
+      }
+    ]
+  },
+  "missile_attacks": {
+    "icon": "icons/missile_attacks.svg",
+    "cities": [
+      {
+        "ru": "Мариуполь",
+        "uk": "Маріуполь",
+        "en": "Mariupol"
+      },
+      {
+        "ru": "Харьков",
+        "uk": "Харків",
+        "en": "Kharkiv"
+      },
+      {
+        "ru": "Львов",
+        "uk": "Львів",
+        "en": "Lviv"
+      },
+      {
+        "ru": "Чернигов",
+        "uk": "Чернігів",
+        "en": "Chernihiv"
+      },
+      {
+        "ru": "Изюм",
+        "uk": "Ізюм",
+        "en": "Izyum"
+      },
+      {
+        "ru": "Киев",
+        "uk": "Київ",
+        "en": "Kyiv"
+      }
+    ]
+  },
+  "air_strikes": {
+    "icon": "icons/air_strikes.svg",
+    "cities": [
+      {
+        "ru": "Мариуполь",
+        "uk": "Маріуполь",
+        "en": "Mariupol"
+      },
+      {
+        "ru": "Чернигов",
+        "uk": "Чернігів",
+        "en": "Chernihiv"
+      }
+    ]
+  },
+  "siege": {
+    "icon": "icons/siege.svg",
+    "cities": [
+      {
+        "ru": "Мариуполь",
+        "uk": "Маріуполь",
+        "en": "Mariupol"
+      },
+      {
+        "ru": "Чернигов",
+        "uk": "Чернігів",
+        "en": "Chernihiv"
+      }
+    ]
+  },
+  "weapon_type_reported": {
+    "icon": "icons/weapon_type_reported.svg",
+    "cities": [
+      {
+        "ru": "Мариуполь",
+        "uk": "Маріуполь",
+        "en": "Mariupol"
+      },
+      {
+        "ru": "Харьков",
+        "uk": "Харків",
+        "en": "Kharkiv"
+      },
+      {
+        "ru": "Львов",
+        "uk": "Львів",
+        "en": "Lviv"
+      },
+      {
+        "ru": "Чернигов",
+        "uk": "Чернігів",
+        "en": "Chernihiv"
+      },
+      {
+        "ru": "Изюм",
+        "uk": "Ізюм",
+        "en": "Izyum"
+      },
+      {
+        "ru": "Киев",
+        "uk": "Київ",
+        "en": "Kyiv"
+      }
+    ]
+  },
+  "authoritative_sources": {
+    "icon": "icons/authoritative_sources.svg",
+    "cities": [
+      {
+        "ru": "Мариуполь",
+        "uk": "Маріуполь",
+        "en": "Mariupol"
+      },
+      {
+        "ru": "Харьков",
+        "uk": "Харків",
+        "en": "Kharkiv"
+      },
+      {
+        "ru": "Львов",
+        "uk": "Львів",
+        "en": "Lviv"
+      },
+      {
+        "ru": "Чернигов",
+        "uk": "Чернігів",
+        "en": "Chernihiv"
+      },
+      {
+        "ru": "Изюм",
+        "uk": "Ізюм",
+        "en": "Izyum"
+      },
+      {
+        "ru": "Киев",
+        "uk": "Київ",
+        "en": "Kyiv"
+      },
+      {
+        "ru": "Буча",
+        "uk": "Буча",
+        "en": "Bucha"
+      },
+      {
+        "ru": "Херсон",
+        "uk": "Херсон",
+        "en": "Kherson"
+      }
+    ]
+  }
+}
